@@ -238,7 +238,7 @@ section {
                 </div>
               </li>
             <li class="nav-item">
-              <a class="nav-link" href="itemEvent.do"><img src="resources/images/event.png" width="50px" height="50px"><br>이벤트</a>
+              <a class="nav-link" href="eventList.do"><img src="resources/images/event.png" width="50px" height="50px"><br>이벤트</a>
             </li>
           </ul>
           <!-- </ul> -->

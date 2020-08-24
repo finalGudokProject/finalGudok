@@ -59,93 +59,93 @@
 
     </style>
   </head>
-  <body>
-  
-  <jsp:include page="../common/adminMenubar.jsp"/>
+<body>
+
+<jsp:include page="../common/adminMenubar.jsp"/>
 
     <div class="content">
       <div class="container box">
 
-        <div style="font-size: 30px;">1:1 문의</div>
+        <div style="font-size: 30px;">이벤트</div>
         
-        <form action="adminInquiryList.do" method="post" enctype="multipart/form-data">
+            <form action="adminEventList.do" method="post" enctype="multipart/form-data">
             <div class="input-group" >
               <select class="custom-select" id="searchType" name="searchType" style="margin-left: 600px; width:50px" >
-                <option selected>모두</option>
-                <option value="1">제목</option>
-                <option value="2">내용</option>
-                <option value="3">제목+내용</option>
+                <option value="all">모두</option>
+                <option value="title">제목</option>
+                <option value="content">내용</option>            
+                <option value="titleContent">제목+내용</option>
               </select>
-              <input type="text" class="form-control" style="float:right; width:100px;height: 38px;">
-              <div class="input-group-append" style="float:right; width: 75px; height: 38px;">
+              <input type="text" class="form-control" id="keyword" name="keyword" value="" style="float:right; width:150px;height: 38px;" placeholder="검색어를 입력하세요">
+              <div class="input-group-append" style="float:right; width: 75px; height: 38px;">                
                 <input type="submit" value="검색" id="searchBtn" name="searchBtn" class="btn btn-primary" style="height:38px">
               </div>
             </div>
             <br>
 
+            
           <table style="text-align: center; margin-top:15px">
         <thead>
           <tr>
-            <th><input type="checkbox"></th>
-            <th style="width:10%">번호</th>
-          <th style="width: 35%;">제목</th>
-          <th style="width: 20%;">작성자</th>          
-          <th style="width: 20%;">작성일</th>
-          <th style="width: 20%;">답변상태</th>
+            <th><input type="checkbox">
+            </th><th style="width:10%">번호</th>
+            <th style="width:45%">제목</th>
+            <th style="width:20%">작성일</th>
+            <th style="width:10%">조회수</th>
+            <th style="width:10%">게시여부</th>
           </tr>
         </thead>
-        <tbody>
-	      		<c:choose>
-	      			<c:when test="${fn:length(list1)>0}">
-			        	<c:forEach var="b" items="${list1 }" varStatus="cnt">
-							<tr>
-								<td><input type="checkbox"></td>
-								<td align="center">${b.rownum }</td>
-								<td align="center">
-									<c:url var="adminInquiryDetail" value="adminInquiryDetail.do">
-										<c:param name="bBoard_no" value="${b.bBoard_no }"/>
-										<c:param name="page" value="${pi.currentPage }"/>
-									</c:url>
+        <tbody >
+	        <c:choose>
+		      			<c:when test="${fn:length(list1)>0 }">
+					        <c:forEach var="b" items="${list1 }" varStatus="cnt">
+					          <tr>
+					          		<td><input type="checkbox">
+					          		<td align="center">${b.rownum }</td>
+									<td align="center">
+										<c:url var="adminEventDetail" value="adminEventDetail.do">
+											<c:param name="bBoard_no" value="${b.bBoard_no }"/>
+											<c:param name="page" value="${pi.currentPage }"/>
+										</c:url>
+										<a href="${adminEventDetail }">${b.bTitle }</a>
+									</td>
+									<td align="center">${b.bWrite_date }</td>
+									<td align="center">${b.bRead_num }</td>
+									<td align="center">
 									<c:choose>
-									<c:when test="${list2[cnt.index] eq 'secret [oBoard_no=0, oSecret=Y, oSecret_pwd=null]'}">
-									<a href="${adminInquiryDetail }">[공개] ${b.bTitle }</a>
+									<c:when test="${list2[cnt.index] eq 'EventBoard [eBoard_no=0, eE_status=Y]'}">
+									게시
 									</c:when>
 									<c:otherwise>
-									<a href="${adminInquiryDetail }">[비공개] ${b.bTitle }</a>
+									중지
 									</c:otherwise>
-									</c:choose>
-								</td>
-								<td align="center">${b.bMember_id}</td>
-								<td align="center">${b.bWrite_date }</td>
-								<td align="center">
-								<c:choose>
-								<c:when test="${list3[cnt.index]  eq 'Inquiry [iBoard_no=0, iInquiry_yn=N, iInquiry_date=null, iInquiry_content=null, iBoard_type=null, iInquiry_name=null]'}">
-									답변 대기중	
-								</c:when>
-								<c:otherwise>
-									답변 완료	
-								</c:otherwise>		
-								</c:choose>						
-								</td>
-							</tr>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<td colspan="5">조회된 결과가 없습니다.</td>
-					</c:otherwise>
-				</c:choose>
-	      </tbody>
-      	</table>
+									</c:choose>		
+									</td>
+					          </tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<td colspan="6">조회된 결과가 없습니다.</td>
+						</c:otherwise>
+			</c:choose>
+        </tbody>
+      </table>
             <br><br>
+            &nbsp;&nbsp;<a href="adminEventInsert.do" type="button" class="btn btn-primary" style="float:right;">글쓰기</a> 
             <input type="submit" value="삭제" class="btn btn-primary" style="float:right; margin-right: 10px;">
+            <input type="submit" value="중지" class="btn btn-primary" style="float:right; margin-right: 10px;">
+            <input type="submit" value="게시" class="btn btn-primary" style="float:right; margin-right: 10px;">
+    </form>
             <br><br><br>
-   		 </form>
-
-                    <div class="page-center">
-   					<c:choose>
-	      			<c:when test="${fn:length(list1)>0 }">
+                  
+                  
+                  
+                  
+      			<!------페이징 처리----->
+                <div class="page-center">
+                    <c:choose>
+	      			<c:when test="${fn:length(list)>0 }">
                     <ul class="pagination-t">
-                    
                        <!-- 이전 -->
                         <c:if test="${pi.currentPage eq 1 }">
                            <li class="page-item-t disabled-t"><a class="page-link-t"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -153,7 +153,7 @@
 						   </svg></a></li>
                   		</c:if>
                    		<c:if test="${pi.currentPage gt 1 }">
-                     		<c:url var="blistBack" value="adminInquiryList.do">
+                     		<c:url var="blistBack" value="adminEventList.do">
                         		<c:param name="page" value="${pi.currentPage-1 }"/>
                      		</c:url>
                             <li class="page-item-t">
@@ -171,7 +171,7 @@
                      </c:if>
                      
                            <c:if test="${p ne pi.currentPage }">
-                              <c:url var="blistCheck" value=" adminInquiryList.do">
+                              <c:url var="blistCheck" value="adminEventList.do">
                                  <c:param name="page" value="${p }"/>
                               </c:url>
                               <li class="page-item-t"><a class="page-link-t" href="${blistCheck }">${p } <span class="sr-only"></span></a>
@@ -188,7 +188,7 @@
 						   </svg></a></li>
                   		</c:if>
                    		<c:if test="${pi.currentPage lt pi.maxPage }">
-                     		<c:url var="blistAfter" value=" adminInquiryList.do">
+                     		<c:url var="blistAfter" value="adminEventList.do">
                         		<c:param name="page" value="${pi.currentPage+1 }"/>
                      		</c:url>
                             <li class="page-item-t">
@@ -204,7 +204,6 @@
 					</c:otherwise>
 				</c:choose>
                 </div>
-                <br><br><br>
 
     </div><!--하얀박스 있는부분 끝-->
   </div><!--회색바탕 div-->
@@ -220,5 +219,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-</body>
+  </body>
 </html>

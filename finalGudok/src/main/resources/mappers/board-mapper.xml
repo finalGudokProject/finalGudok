@@ -51,6 +51,11 @@
 		<result property="iInquiry_content" column="INQUIRY_CONTENT"/>
 		<result property="iBoard_type" column="BOARD_TYPE"/>
 	</resultMap>
+
+	<resultMap type="EventBoard" id="eventBoard">
+		<id property="eBoard_no" column="BOARD_NO"/>
+		<result property="eE_status" column="E_STATUS"/>
+	</resultMap>
 	
 	
 	<!-- List 게시판 리스트 불러오기 -->
@@ -128,6 +133,7 @@
 		SELECT O.SECRET
 		FROM BOARD B
 		LEFT JOIN ONE_INQUIRY O ON (B.BOARD_NO = O.BOARD_NO)
+		WHERE BOARD_CODE = 'O'
 		ORDER BY B.BOARD_NO DESC
 	</select>
 
@@ -135,8 +141,36 @@
 		SELECT O.INQUIRY_YN
 		FROM BOARD B
 		LEFT JOIN INQUIRY O ON (B.BOARD_NO = O.BOARD_NO)
+		WHERE BOARD_CODE = 'O'
 		ORDER BY B.BOARD_NO DESC
 	</select>
+	
+	<!-- Event -->
+	<select id="getListCountEvent" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD
+		WHERE BOARD_CODE = 'E'
+	</select>
+	
+	<select id="getBoardListEvent1" resultMap="boardResultSet1">
+		SELECT ROWNUM, B.*
+		FROM (SELECT *
+        FROM BOARD B
+        LEFT JOIN BOARD_IMAGE BI on (B.BOARD_NO = BI.BOARD_NO)
+        LEFT JOIN IMAGE on (B_IMAGE_NO = IMAGE_NO)
+        ORDER BY B.BOARD_NO) B
+		WHERE BOARD_CODE = 'E'
+        ORDER BY ROWNUM DESC
+	</select>
+	
+	<select id="getBoardListEvent2" resultMap="eventBoard">
+		SELECT E.E_STATUS
+		FROM BOARD B
+		LEFT JOIN EVENT_BOARD E ON (B.BOARD_NO = E.BOARD_NO)
+		WHERE BOARD_CODE = 'E'
+		ORDER BY B.BOARD_NO DESC
+	</select>
+	
 	
 	<!-- Count 조회수 증가 -->
 	<update id="updateCount" parameterType="int">
@@ -172,6 +206,13 @@
         LEFT JOIN INQUIRY I ON (B.BOARD_NO = I.BOARD_NO)
         LEFT JOIN INQUIRY_TYPE T ON (I.BOARD_TYPE = T.BOARD_TYPE)
         WHERE I.BOARD_NO = #{b.bBoard_no}
+	</select>
+
+	<select id="selectEDetail" parameterType="int" resultMap="eventBoard">
+		SELECT *
+		FROM BOARD B
+        LEFT JOIN EVENT_BOARD E ON (B.BOARD_NO = E.BOARD_NO)
+        WHERE E.BOARD_NO = #{b.bBoard_no}
 	</select>
 	
 	<!-- img존재 -->
@@ -255,6 +296,7 @@
 			, DEFAULT
 		)
 	</insert>
+	
 	<insert id="insertInquiry2" parameterType="secret">
 		INSERT INTO ONE_INQUIRY VALUES(
 			SEQ_BNO.CURRVAL
@@ -262,6 +304,7 @@
 			, #{oSecret_pwd}
 		)
 	</insert>
+	
 	<insert id="insertInquiry3" parameterType="inquiry">
 		INSERT INTO INQUIRY VALUES(
 			SEQ_BNO.CURRVAL
@@ -269,6 +312,29 @@
 			, NULL
 			, #{iInquiry_content }
 			, #{iBoard_type }
+		)
+	</insert>
+	
+	<!-- Event -->
+	<insert id="insertEvent1" parameterType="Board">
+		INSERT INTO BOARD VALUES(
+			SEQ_BNO.NEXTVAL
+			, #{bTitle}
+			, #{bContent}
+			, SYSDATE
+			, DEFAULT
+			, 'E'
+			, 1
+			, 'admin'
+			, 'admin@naver.com'
+			, DEFAULT
+		)
+	</insert>
+	
+	<insert id="insertEvent2" parameterType="eventBoard">
+		INSERT INTO EVENT_BOARD VALUES(
+			SEQ_BNO.CURRVAL
+			, 'Y'
 		)
 	</insert>
 	
@@ -317,8 +383,23 @@
 		SET BOARD_TYPE = #{iBoard_type}
 		WHERE BOARD_NO = #{iBoard_no}
 	</update>
+
+	<!-- inquiry 답변 등록(수정) -->
+	<update id="updateInquiryAnswer1" parameterType="inquiry">
+		UPDATE INQUIRY
+		SET INQUIRY_YN = 'Y'
+			,INQUIRY_DATE = SYSDATE
+			,INQUIRY_CONTENT = #{iInquiry_content }
+		WHERE BOARD_NO = #{iBoard_no}
+	</update>
 	
 	<!-- Delete 게시물 삭제하기 -->
+	
+	<!-- Event -->
+	<delete id="deleteEventBoard" parameterType="int">
+		DELETE FROM EVENT_BOARD 
+		WHERE BOARD_NO = #{bBoard_no}
+	</delete>
 	
 	<!-- image -->
 	<delete id="deleteImage" parameterType="int">
@@ -352,8 +433,10 @@
 
 	<!-- inquiry -->
 	<delete id="deleteInquiryBoard" parameterType="int">
-		DELETE FROM INQUIRY I
+		DELETE FROM INQUIRY 
 		WHERE BOARD_NO = #{bBoard_no}
 	</delete>
+
+	
 	
 </mapper>

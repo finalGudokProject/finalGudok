@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.finalGudok.board.model.exception.BoardException;
 import com.kh.finalGudok.board.model.service.BoardService;
 import com.kh.finalGudok.board.model.vo.Board;
+import com.kh.finalGudok.board.model.vo.EventBoard;
 import com.kh.finalGudok.board.model.vo.Inquiry;
 import com.kh.finalGudok.board.model.vo.bPageInfo;
 import com.kh.finalGudok.board.model.vo.secret;
@@ -424,8 +425,332 @@ public class BoardController {
 				}
 			}
 	
-	
 	//-----------------------------------------------
+	// admin Inquiry List
+			@RequestMapping("adminInquiryList")
+			public ModelAndView adminInquiryList(ModelAndView mv, 
+					@RequestParam(value="page", required=false) Integer page) {	// 기본 자료형으로 받을 수 없기 때문에 Integer를 쓴다
+				// 페이징 관련 처리부터 하자
+				int currentPage = 1;
+				if(page != null) {
+					currentPage = page;
+				}
+				
+				int listCount = bService.getListCountInquiry();
+				
+				bPageInfo pi = getPageInfo(currentPage, listCount);
+				
+
+				ArrayList<Board> list1 = bService.selectListInquiry1(pi);
+				// 비공개, 공개, 답변상태를 표기하기 위한 ArrayList
+				ArrayList<secret> list2 = bService.selectListInquiry2(pi);
+				ArrayList<Inquiry> list3 = bService.selectListInquiry3(pi);
+				System.out.println("list1 : " + list1);
+				System.out.println("list2 : " + list2);
+				System.out.println("list3 : " + list3);
+				
+				if(list1 != null && list2 != null && list3 != null) {
+					mv.addObject("list1",list1);
+					mv.addObject("list2",list2);
+					mv.addObject("list3",list3);
+					mv.addObject("pi",pi);
+					mv.setViewName("admin/adminInquiryList");
+				}else {
+					throw new BoardException("게시글 전체 조회 실패!");
+				}
+				
+				return mv;
+			}
+			
+	// Detail
+			@RequestMapping("adminInquiryDetail")
+			public ModelAndView adminInquiryDetail(ModelAndView mv, int bBoard_no, @RequestParam("page") Integer page) {
+				int currentPage = page;
+				
+				int result = bService.addReadCount(bBoard_no); // 조회수가 증가 되어야만 게시물 상세보기가 가능하다
+				
+				if (result > 0) {
+					Board board = bService.selectOIDetail1(bBoard_no);
+					System.out.println("detail: " + board);
+					secret secret = bService.selectOIDetail2(bBoard_no);
+					System.out.println("detail: " +secret);
+					Inquiry inquiry = bService.selectOIDetail3(bBoard_no);
+					System.out.println("detail: " +inquiry);
+					if(board != null && secret != null && inquiry != null) {
+						mv.addObject("board", board).addObject("secret", secret).addObject("inquiry", inquiry).addObject("currentPage",currentPage).setViewName("admin/adminInquiryDetail");
+					}else {
+						throw new BoardException("게시글 조회 실패");
+					}			
+				}else {
+					throw new BoardException("게시글 조회수 증가 실패!");
+				}		
+				return mv;
+			}
+	// Insert(Update)
+			@RequestMapping("adminInquiryUpdate.do")
+			public ModelAndView adminInquiryUpdate(ModelAndView mv, Integer bBoard_no,
+												@RequestParam("page") Integer page) {
+				Board board = bService.selectOIDetail1(bBoard_no);
+				secret secret = bService.selectOIDetail2(bBoard_no);
+				Inquiry inquiry = bService.selectOIDetail3(bBoard_no);
+				System.out.println(board);
+				System.out.println(secret);
+				System.out.println(inquiry);
+				mv.addObject("board", board).addObject("secret", secret).addObject("inquiry", inquiry).addObject("currentPage", page).setViewName("admin/adminInquiryUpdate");
+
+				return mv;
+			}
+			
+		@RequestMapping("aInquiryUpdate.do")
+		public String aInquiryUpdate(HttpServletRequest request, Inquiry i) { 
+
+				int result = bService.updateInquiryAnswer1(i);
+
+				if(result > 0) {
+					return "redirect:adminInquiryList.do";
+				}else {
+					throw new BoardException("게시글 등록 실패!");
+				}
+			}
+			
+		
+	// Delete		
+			@RequestMapping("adminInquiryDelete.do")
+			public String adminInquiryDelete(Integer bBoard_no, HttpServletRequest request) {
+				System.out.println(bBoard_no);
+				Board b = bService.selectIDetail(bBoard_no);
+				System.out.println(b);
+				if(b.getOriginalFileName() != null) {
+					iDeleteFile(b.getRenameFileName(), request);
+				}
+				
+				// 게시글 삭제하기
+				int result1 = bService.deleteImage(bBoard_no);
+				int result2 = bService.deleteBoardImage(bBoard_no);
+				int result3 = bService.deleteBoard(bBoard_no);
+				int result4 = bService.deleteOneInquiryBoard(bBoard_no);
+				int result5 = bService.deleteInquiryBoard(bBoard_no);
+				
+				if(result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0 && result5 > 0) {
+					return "redirect:adminInquiryList.do";
+				}else {
+					throw new BoardException("게시물 삭제 실패!");
+				}
+			}
+	//-------------------------------------------------
+	// admin Event
+	// List
+			@RequestMapping("adminEventList.do")
+			public ModelAndView adminEventDetail(ModelAndView mv, 
+					@RequestParam(value="page", required=false) Integer page) {	// 기본 자료형으로 받을 수 없기 때문에 Integer를 쓴다
+				// 페이징 관련 처리부터 하자
+				int currentPage = 1;
+				if(page != null) {
+					currentPage = page;
+				}
+				
+				int listCount = bService.getListCountEvent();
+				
+				bPageInfo pi = getPageInfo(currentPage, listCount);
+				
+				// 페이징 처리가 끝나면 게시글을 추려오자
+				ArrayList<Board> list1 = bService.selectListEvent1(pi);
+				// 게시여부를 위한 ArrayList
+				ArrayList<EventBoard> list2 = bService.selectListEvent2(pi);
+				System.out.println(list1);
+				System.out.println(list2);
+				if(list1 != null && list2 != null) {
+					mv.addObject("list1",list1);
+					mv.addObject("list2",list2);					
+					mv.addObject("pi",pi);
+					mv.setViewName("admin/adminEventList");
+				}else {
+					throw new BoardException("게시글 전체 조회 실패!");
+				}
+				
+				return mv;
+			}
+	// Detail
+			@RequestMapping("adminEventDetail")
+			public ModelAndView adminEventDetail(ModelAndView mv, int bBoard_no, @RequestParam("page") Integer page) {
+				int currentPage = page;
+				
+				int result = bService.addReadCount(bBoard_no); // 조회수가 증가 되어야만 게시물 상세보기가 가능하다
+				
+				if (result > 0) {
+					Board board = bService.selectIDetail(bBoard_no);
+					System.out.println("detail: " + board);
+					EventBoard eventBoard = bService.selectEDetail(bBoard_no);
+					System.out.println("detail: " +eventBoard);
+					if(board != null && eventBoard != null) {
+						mv.addObject("board", board).addObject("eventBoard", eventBoard).addObject("currentPage",currentPage).setViewName("admin/adminEventDetail");
+					}else {
+						throw new BoardException("게시글 조회 실패");
+					}			
+				}else {
+					throw new BoardException("게시글 조회수 증가 실패!");
+				}		
+				return mv;
+			}
+	// Insert
+			@RequestMapping("adminEventInsert.do")
+			public String adminEventInsert(){
+				return "admin/adminEventInsert";
+			}
+			
+			@RequestMapping("eventInsert.do")
+			public String eventInsert(HttpServletRequest request, Board b, EventBoard e,
+					@RequestParam(value="uploadEvent", required=false) MultipartFile file) { // 다중 업로드 파일은 List<MultipartFile> file 이용 찾아서 해봐		
+				// NoticeController에 있는 saveFile 메소드 가져오고 buploadFiles폴더로 수정하자
+				// 그리고 이번엔 날짜를 활용한 rename을 적용해 보자
+				
+				if(!file.getOriginalFilename().equals("")) {
+					
+					String renameFileName=eSaveFile(file,request);
+				      String root=request.getSession().getServletContext().getRealPath("resources");
+				      String savePath=root+"\\eventUploadFiles";
+				      
+				      b.setOriginalFileName(file.getOriginalFilename());
+				      b.setRenameFileName(renameFileName);
+				      b.setImagePath(savePath);
+
+				}
+				
+				int result1 = bService.insertEvent1(b);
+				int result2 = bService.insertEvent2(e);
+				int result3 = bService.insertImage(b);
+				
+				if((result1>0 && result2>0 && result3<0) || (result1>0 && result2>0 && result3>0)) {
+					return "redirect:adminEventList.do";
+				}else {
+					throw new BoardException("게시글 등록 실패!");
+				}
+			}
+			
+			// 파일이 저장 될 경로를 설정하는 메소드
+				private String eSaveFile(MultipartFile file, HttpServletRequest request) {
+					
+					String root = request.getSession().getServletContext().getRealPath("resources");
+					// request.getSession().getServletContext() -> webapp경로
+					// getRealPath -> File: 빼고나오는 경로
+					
+					String savePath = root + "\\eventUploadFiles";
+					// 폴더가 없으면 만들면 되고 폴더가 없으면 이렇게 파일 이름을 써서 만든다
+					
+					File folder = new File(savePath);
+					
+					if(!folder.exists()) {	// webapp아래에 있는 resources 폴더 아래에
+											// nuloadFiles가 없어서 File객체를 찾을 수 없다면
+						folder.mkdirs();	// 폴더를 만들어라
+						
+					}
+					
+					// 공지글은 파일명 중복 제거는 신경쓰지 않고 했지만
+					// 게시판에서는 파일명을 날짜(업로드 시간)로 rename 해보자
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+					String originFileName = file.getOriginalFilename();
+					String renameFileName = sdf.format(new java.sql.Date(System.currentTimeMillis()))
+							+ "." + originFileName.substring(originFileName.lastIndexOf(".")+1);
+					
+					
+					String filePath = folder + "\\" + renameFileName;
+					// 실제 저장 될 파일의 경로 + rename파일명	
+					
+					try {
+						file.transferTo(new File(filePath));
+						// 이 상태로는 파일 업로드가 되지 않는다.
+						// 왜냐면 파일 제한크기에 대한 설정을 주지 않았기 때문이다.
+						// root-context.xml에 업로드 제한 파일 크기를 지정해 주자.
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					
+					return renameFileName;
+				}
+	// Update
+				@RequestMapping("adminEventUpdate.do")
+				public ModelAndView adminEventUpdate(ModelAndView mv, Integer bBoard_no,
+													@RequestParam("page") Integer page) {
+					Board board = bService.selectIDetail(bBoard_no);
+					System.out.println(board);
+					EventBoard eventBoard = bService.selectEDetail(bBoard_no);
+					mv.addObject("board", board).addObject("eventBoard", eventBoard).addObject("currentPage", page).setViewName("admin/adminEventUpdate");
+
+					return mv;
+				}
+				
+				@RequestMapping(value="eventUpdate.do", method=RequestMethod.POST)
+				public ModelAndView eventUpdate(ModelAndView mv, Board b, 
+														HttpServletRequest request,
+														@RequestParam("page") Integer page,
+														@RequestParam(value="uploadEvent", required=false)
+														MultipartFile file) {
+
+						if(!file.getOriginalFilename().equals("")) {	// 원래 파일명이 존재하면
+							if(b.getRenameFileName() != null) {			// 바뀐이름이 존재하면
+							eDeleteFile(b.getRenameFileName(), request);	// 바뀐이름 삭제
+							}
+							String renameFileName = eSaveFile(file, request);
+						
+						
+						b.setOriginalFileName(file.getOriginalFilename());
+						b.setRenameFileName(renameFileName);
+						} 
+						String root=request.getSession().getServletContext().getRealPath("resources");
+						String savePath=root+"\\eventUploadFiles";
+						b.setImagePath(savePath);
+						
+
+						int result1 = bService.updateImage(b);
+						int result2 = bService.updateBoard(b);
+						
+						if(result1>0 || result2>0) { 
+						mv.addObject("page",page).setViewName("redirect:adminEventList.do");
+						}else {
+						throw new BoardException("게시글 수정 실패!!");
+						}
+						
+						return mv;
+					
+				}
+	// Delete
+				private void eDeleteFile(String fileName, HttpServletRequest request) {
+					String root = request.getSession().getServletContext().getRealPath("resources");
+					String savePath = root + "\\eventUploadFiles";
+					
+					File f = new File(savePath + "\\" + fileName);
+					if(f.exists()) {
+						f.delete();
+					}
+				}
+				
+				@RequestMapping("eventDelete.do")
+				public String eventDelete(Integer bBoard_no, HttpServletRequest request) {
+					System.out.println(bBoard_no);
+					Board b = bService.selectIDetail(bBoard_no);
+					System.out.println(b);
+					if(b.getOriginalFileName() != null) {
+						eDeleteFile(b.getRenameFileName(), request);
+					}
+					
+					// 게시글 삭제하기
+					int result1 = bService.deleteEventBoard(bBoard_no);
+					int result2 = bService.deleteImage(bBoard_no);
+					int result3 = bService.deleteBoardImage(bBoard_no);
+					int result4 = bService.deleteBoard(bBoard_no);
+					
+					if(result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0) {
+						return "redirect:adminEventList.do";
+					}else {
+						throw new BoardException("게시물 삭제 실패!");
+					}
+				}
+			
+			
+	//-------------------------------------------------
 	// serviceCenter
 	
 	// etc
@@ -933,10 +1258,12 @@ public class BoardController {
 						System.out.println(oSecret);
 						
 						if(oSecret.equals("N")) {
-							s.setoSecret("Y");
-						}else {
 							s.setoSecret("N");
+						}else {
+							s.setoSecret("Y");
 						}
+						
+						System.out.println(oSecret);
 						
 						int result1 = bService.updateImage(b);
 						int result2 = bService.updateBoard(b);
@@ -984,6 +1311,63 @@ public class BoardController {
 					}else {
 						throw new BoardException("게시물 삭제 실패!");
 					}
+				}
+				
+				
+		// event
+		// eventList
+				@RequestMapping("eventList.do")
+				public ModelAndView eventList(ModelAndView mv, 
+						@RequestParam(value="page", required=false) Integer page) {	// 기본 자료형으로 받을 수 없기 때문에 Integer를 쓴다
+					// 페이징 관련 처리부터 하자
+					int currentPage = 1;
+					if(page != null) {
+						currentPage = page;
+					}
+					
+					int listCount = bService.getListCountEvent();
+					
+					bPageInfo pi = getPageInfo(currentPage, listCount);
+					
+					// 페이징 처리가 끝나면 게시글을 추려오자
+					ArrayList<Board> list1 = bService.selectListEvent1(pi);
+					// 게시여부를 위한 ArrayList
+					ArrayList<EventBoard> list2 = bService.selectListEvent2(pi);
+					System.out.println(list1);
+					System.out.println(list2);
+					if(list1 != null && list2 != null) {
+						mv.addObject("list1",list1);
+						mv.addObject("list2",list2);					
+						mv.addObject("pi",pi);
+						mv.setViewName("event/eventList");
+					}else {
+						throw new BoardException("게시글 전체 조회 실패!");
+					}
+					
+					return mv;
+				}
+				
+		// eventDetail
+				@RequestMapping("eventDetail")
+				public ModelAndView eventDetail(ModelAndView mv, int bBoard_no, @RequestParam("page") Integer page) {
+					int currentPage = page;
+					
+					int result = bService.addReadCount(bBoard_no); // 조회수가 증가 되어야만 게시물 상세보기가 가능하다
+					
+					if (result > 0) {
+						Board board = bService.selectIDetail(bBoard_no);
+						System.out.println("detail: " + board);
+						EventBoard eventBoard = bService.selectEDetail(bBoard_no);
+						System.out.println("detail: " +eventBoard);
+						if(board != null && eventBoard != null) {
+							mv.addObject("board", board).addObject("eventBoard", eventBoard).addObject("currentPage",currentPage).setViewName("event/eventDetail");
+						}else {
+							throw new BoardException("게시글 조회 실패");
+						}			
+					}else {
+						throw new BoardException("게시글 조회수 증가 실패!");
+					}		
+					return mv;
 				}
 		
 }

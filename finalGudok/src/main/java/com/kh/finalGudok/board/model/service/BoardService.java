@@ -3,6 +3,7 @@ package com.kh.finalGudok.board.model.service;
 import java.util.ArrayList;
 
 import com.kh.finalGudok.board.model.vo.Board;
+import com.kh.finalGudok.board.model.vo.EventBoard;
 import com.kh.finalGudok.board.model.vo.Inquiry;
 import com.kh.finalGudok.board.model.vo.bPageInfo;
 import com.kh.finalGudok.board.model.vo.secret;
@@ -31,6 +32,12 @@ public interface BoardService {
 	ArrayList<secret> selectListInquiry2(bPageInfo pi);
 	ArrayList<Inquiry> selectListInquiry3(bPageInfo pi);
 
+	// Event 리스트
+	int getListCountEvent();
+
+	ArrayList<Board> selectListEvent1(bPageInfo pi);
+	ArrayList<EventBoard> selectListEvent2(bPageInfo pi);
+	
 	// Count 조회수 기능
 	int addReadCount(int bBoard_no);
 
@@ -48,7 +55,11 @@ public interface BoardService {
 	int insertInquiry2(secret s);
 	
 	int insertInquiry3(Inquiry i);
+	
+	int insertEvent1(Board b);
 
+	int insertEvent2(EventBoard e);
+	
 	// Detail 글 세부
 	Board selectDetail (int bBoard_no);	
 	
@@ -60,6 +71,8 @@ public interface BoardService {
 	
 	Inquiry selectOIDetail3(int bBoard_no);
 	
+	EventBoard selectEDetail(int bBoard_no);
+	
 	// Update 글 수정
 	int updateImage(Board b);
 
@@ -68,6 +81,8 @@ public interface BoardService {
 	int updateOneInquiry(secret s);
 
 	int updateInquiry(Inquiry i);
+
+	int updateInquiryAnswer1(Inquiry i);
 	// Delete글 삭제
 	int deleteImage(Integer bBoard_no);
 
@@ -78,6 +93,18 @@ public interface BoardService {
 	int deleteOneInquiryBoard(Integer bBoard_no);
 
 	int deleteInquiryBoard(Integer bBoard_no);
+
+	int deleteEventBoard(Integer bBoard_no);
+
+	
+
+	
+
+	
+
+	
+
+	
 
 	
 

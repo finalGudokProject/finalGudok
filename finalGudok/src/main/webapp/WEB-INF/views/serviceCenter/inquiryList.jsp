@@ -159,18 +159,19 @@
 	      			<c:when test="${fn:length(list1)>0}">
 			        	<c:forEach var="b" items="${list1 }" varStatus="cnt">
 							<tr>
+								<td><input type="checkbox"></td>
 								<td align="center">${b.rownum }</td>
 								<td align="center">
-									<c:url var="inquiryDetail" value="inquiryDetail.do">
+									<c:url var="adminInquiryDetail" value="adminInquiryDetail.do">
 										<c:param name="bBoard_no" value="${b.bBoard_no }"/>
 										<c:param name="page" value="${pi.currentPage }"/>
 									</c:url>
 									<c:choose>
 									<c:when test="${list2[cnt.index] eq 'secret [oBoard_no=0, oSecret=Y, oSecret_pwd=null]'}">
-									<a href="${inquiryDetail }">[공개] ${b.bTitle }</a>
+									<a href="${adminInquiryDetail }">[공개] ${b.bTitle }</a>
 									</c:when>
 									<c:otherwise>
-									<a href="${inquiryDetail }">[비공개] ${b.bTitle }</a>
+									<a href="${adminInquiryDetail }">[비공개] ${b.bTitle }</a>
 									</c:otherwise>
 									</c:choose>
 								</td>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.finalGudok.board.model.dao.BoardDao;
 import com.kh.finalGudok.board.model.vo.Board;
+import com.kh.finalGudok.board.model.vo.EventBoard;
 import com.kh.finalGudok.board.model.vo.Inquiry;
 import com.kh.finalGudok.board.model.vo.bPageInfo;
 import com.kh.finalGudok.board.model.vo.secret;
@@ -71,6 +72,21 @@ public class BoardSerivceImpl implements BoardService {
 		return bDao.selectListInquiry3(pi);
 	}
 	
+	// Event
+	@Override
+	public int getListCountEvent() {
+		return bDao.getListCountEvent();
+	}
+	
+	@Override
+	public ArrayList<Board> selectListEvent1(bPageInfo pi) {
+		return bDao.selectListEvent1(pi);
+	}
+
+	@Override
+	public ArrayList<EventBoard> selectListEvent2(bPageInfo pi) {
+		return bDao.selectListEvent2(pi);
+	}
 	
 	// Count
 	@Override
@@ -114,6 +130,17 @@ public class BoardSerivceImpl implements BoardService {
 		return bDao.insertInquiry3(i);
 	}
 	
+	@Override
+	public int insertEvent1(Board b) {
+		return bDao.insertEvent1(b);
+	}
+
+	@Override
+	public int insertEvent2(EventBoard e) {
+		return bDao.insertEvent2(e);
+	}
+	
+	
 	// Detail 세부내용
 	@Override
 	public Board selectDetail(int bBoard_no) {
@@ -139,6 +166,11 @@ public class BoardSerivceImpl implements BoardService {
 	public Inquiry selectOIDetail3(int bBoard_no) {
 		return bDao.selectOIDetail3(bBoard_no);
 	}
+	
+	@Override
+	public EventBoard selectEDetail(int bBoard_no) {
+		return bDao.selectEDetail(bBoard_no);
+	}
 
 	
 	// Update 수정
@@ -160,6 +192,11 @@ public class BoardSerivceImpl implements BoardService {
 	@Override
 	public int updateInquiry(Inquiry i) {
 		return bDao.updateInquiry(i);
+	}
+	
+	@Override
+	public int updateInquiryAnswer1(Inquiry i) {
+		return bDao.updateInquiryAnswer1(i);
 	}
 
 	// Delete 삭제
@@ -187,6 +224,25 @@ public class BoardSerivceImpl implements BoardService {
 	public int deleteInquiryBoard(Integer bBoard_no) {
 		return bDao.deleteInquiryBoard(bBoard_no);
 	}
+
+	@Override
+	public int deleteEventBoard(Integer bBoard_no) {
+		return bDao.deleteEventBoard(bBoard_no);
+	}
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
 
 	
 

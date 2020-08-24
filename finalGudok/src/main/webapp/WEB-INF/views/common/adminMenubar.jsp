@@ -504,8 +504,8 @@ label > span {
                                     <li><a href="adminNoticeList.do">공지사항</a></li>
                                     <li><a href="adminFAQList.do">FAQ</a></li>
                                     <li><a href="adminProductProposalList.do">상품제안</a></li>
-                                    <li><a href="#">1:1 문의</a></li>
-                                    <li><a href="#">이벤트</a></li>
+                                    <li><a href="adminInquiryList.do">1:1 문의</a></li>
+                                    <li><a href="adminEventList.do">이벤트</a></li>
                                   </ul>
                                 </li>
                             </ul>

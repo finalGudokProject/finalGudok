@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.finalGudok.board.model.vo.Board;
+import com.kh.finalGudok.board.model.vo.EventBoard;
 import com.kh.finalGudok.board.model.vo.Inquiry;
 import com.kh.finalGudok.board.model.vo.bPageInfo;
 import com.kh.finalGudok.board.model.vo.secret;
@@ -82,6 +83,26 @@ public class BoardDao {
 			return (ArrayList)sqlSessionTemplate.selectList("boardMapper.getBoardListInquiry3", null, rowBounds);
 		}
 		
+	// Event
+		public int getListCountEvent() {
+			return sqlSessionTemplate.selectOne("boardMapper.getListCountEvent");
+		}
+		
+		public ArrayList<Board> selectListEvent1(bPageInfo pi) {
+			int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			
+			return (ArrayList)sqlSessionTemplate.selectList("boardMapper.getBoardListEvent1", null, rowBounds);
+		}
+
+		public ArrayList<EventBoard> selectListEvent2(bPageInfo pi) {
+			int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			
+			return (ArrayList)sqlSessionTemplate.selectList("boardMapper.getBoardListEvent2", null, rowBounds);
+		}
+
+		
 		
 	// Count
 	public int addReadCount(int bBoard_no) {
@@ -117,6 +138,14 @@ public class BoardDao {
 		return sqlSessionTemplate.insert("boardMapper.insertInquiry3", i);
 	}
 	
+	public int insertEvent1(Board b) {
+		return sqlSessionTemplate.insert("boardMapper.insertEvent1", b);
+	}
+
+	public int insertEvent2(EventBoard e) {
+		return sqlSessionTemplate.insert("boardMapper.insertEvent2", e);
+	}
+
 	
 	// Detail 세부내용
 	public Board selectDetail(int bBoard_no) {
@@ -139,6 +168,11 @@ public class BoardDao {
 		return sqlSessionTemplate.selectOne("boardMapper.selectOIDetail3", bBoard_no);
 	}
 
+	public EventBoard selectEDetail(int bBoard_no) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectEDetail", bBoard_no);
+	}
+
+	
 	// Update 수정
 
 	public int updateImage(Board b) {
@@ -155,6 +189,10 @@ public class BoardDao {
 
 	public int updateInquiry(Inquiry i) {
 		return sqlSessionTemplate.update("boardMapper.updateInquiry", i);
+	}
+	
+	public int updateInquiryAnswer1(Inquiry i) {
+		return sqlSessionTemplate.insert("boardMapper.updateInquiryAnswer1", i);
 	}
 
 	// Delete 삭제
@@ -178,6 +216,16 @@ public class BoardDao {
 		return sqlSessionTemplate.delete("boardMapper.deleteInquiryBoard",bBoard_no);
 	}
 
+	public int deleteEventBoard(Integer bBoard_no) {
+		return sqlSessionTemplate.delete("boardMapper.deleteEventBoard",bBoard_no);
+	}
+
+	
+
+
+
+	
+	
 
 
 

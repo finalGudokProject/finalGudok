@@ -122,7 +122,7 @@
               <table style="margin-top:15px">
                 <tr>
                   <th style="width:15%; padding:20px;text-align: center;" colsapn="1">답변</th>
-                  <td colspan="3" style="height:auto; padding:5%">${inquiry.iInquiry_content }</td>
+                  <td colspan="3" style="height:auto; padding:5%; text-align:left !important">${inquiry.iInquiry_content }</td>
                 </tr>
               </table>
       

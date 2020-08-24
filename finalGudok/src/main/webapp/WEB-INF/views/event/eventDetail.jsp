@@ -24,11 +24,11 @@
   }
   table {
     width: 100%;
-    border: 1px solid #444444;
+    border: 1px solid #CCCCCC !important;
     border-collapse: collapse;
   }
   th, td {
-    border: 1px solid #444444;
+    border: 1px solid #CCCCCC !important;
   }
         body {margin: 10px;}
 </style>
@@ -43,15 +43,18 @@
             <table style="margin-top:15px">
                 <tbody >
                 <tr>
-                    <th style="width:200px; padding:20px; text-align: center;">제목</th>
-                    <td style="text-align: center;" colspan="3">커피 할인 이벤트</td>
+                    <th style="width:10%; padding:20px; text-align:center; ">이벤트</th><td style="width: 35%; text-align:center; ">${board.bTitle }</td>
+                    <th style="width: 10%; text-align:center; ">작성일</th><td style="width: 10%; text-align:center; ">${board.bWrite_date }</td>
+                    <th style="width: 10%; text-align:center; ">조회수</th><td style="width: 10%; text-align:center; ">${board.bRead_num }</td>
                 </tr>
                 <tr>
-	              	<td colspan="2" style="height:auto; padding:5%">
-	                <span style="margin:auto">쓰레기야!</span>
+	              	<td colspan="6" style="height:auto; padding:5%">
+	                <span style="margin:auto">
+	                ${board.bContent }
+	                </span>
 	                <br><br>
 	                <center>
-	                	<img style="width:900px;height:500px"src="resources/images/salad2.jpg" >
+	                	<img style="height:800px;width:800px" src="${contextPath }/resources/eventUploadFiles/${board.renameFileName }">
 	                </center>
 	                </td>
               	</tr>                          
@@ -61,10 +64,13 @@
               <br><br>
       
 
-            <br><br><br>
-            <a href="sc_proposal.html" type="button" class="btn btn-primary" style="float:right;">목록으로</a>
+            <br>
+            <a href="eventList.do" type="button" class="btn btn-primary" style="float:right;">목록으로</a>
             </div>
 
-            <br><br><br>
+            <br><br><br><br><br>
+            <footer class="page-footer font-small indigo">
+				<jsp:include page="../common/footer.jsp" />
+			</footer>
 </body>
 </html>
