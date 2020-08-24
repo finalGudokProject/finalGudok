@@ -63,7 +63,7 @@
 		<result property="itemPrice" column="ITEM_PRICE"/>
 	</resultMap>
 	
-	<resultMap type="mInquiry" id="inquiryResultSet">
+	<!-- <resultMap type="mInquiry" id="inquiryResultSet">
 		<id property="boardNo" column="BOARD_NO"/>
 		<result property="title" column="TITLE"/>
 		<result property="content" column="CONTENT"/>
@@ -73,7 +73,7 @@
 		<result property="memberId" column="MEMBER_ID"/>
 		<result property="email" column="EMAIL"/>
 		<result property="inquiryYN" column="INQUIRY_YN"/>
-	</resultMap>
+	</resultMap> -->
 	
 	<resultMap type="mHeart" id="heartResultSet">
 		<id property="heartNo" column="HEART_NO"/>

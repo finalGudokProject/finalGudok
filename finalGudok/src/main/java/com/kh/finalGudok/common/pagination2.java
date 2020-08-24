@@ -3,6 +3,7 @@ package com.kh.finalGudok.common;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 
 public class pagination2 {
+	
 	public static PageInfo getPageInfo2(int currentPage, int listCount, int pageLimit, int boardLimit) {
 		PageInfo pi = null;
 		

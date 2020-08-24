@@ -6,20 +6,16 @@ import java.util.HashMap;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.member.model.vo.Cart;
-import com.kh.finalGudok.member.model.vo.DeleteHeart;
 import com.kh.finalGudok.member.model.vo.Delivery;
 import com.kh.finalGudok.member.model.vo.Exchange;
 import com.kh.finalGudok.member.model.vo.Grade;
 import com.kh.finalGudok.member.model.vo.Heart;
 import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
-import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
-import com.kh.finalGudok.member.model.vo.Withdrawal;
 import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
-import com.kh.finalGudok.member.model.vo.Inquiry;
 
 
 public interface MemberService {
@@ -55,21 +51,13 @@ public interface MemberService {
 
 	int updateMember(Member m);
 
-	int insertSecession(Withdrawal w);
-
 	int updateMemberStatus(int memberNo);
 
-	ArrayList<Inquiry> selectInquiryList(Integer memberNo);
-
 	ArrayList<Heart> selectHeartList(Integer memberNo);
-	
-	int deleteHeart(DeleteHeart dh);
 
 	Item selectItem(int itemNo);
 
 	int addCart(HashMap map);
-
-	Reply selectReply(Integer boardNo);
 
 	int deleteCart(HashMap map);
 

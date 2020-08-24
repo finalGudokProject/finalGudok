@@ -17,7 +17,7 @@ public class PageInfo implements Serializable {
 	private int boardLimit;
 	
 	public PageInfo() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public PageInfo(int currentPage, int listCount, int pageLimit, int maxPage, int startPage, int endPage,
