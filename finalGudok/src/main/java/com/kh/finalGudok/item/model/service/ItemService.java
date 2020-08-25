@@ -3,16 +3,20 @@ package com.kh.finalGudok.item.model.service;
 import java.util.ArrayList;
 
 import com.kh.finalGudok.item.model.vo.AdminItem;
+import com.kh.finalGudok.item.model.vo.BannerItem;
 import com.kh.finalGudok.item.model.vo.Event;
 
 import com.kh.finalGudok.item.model.vo.Board;
 import com.kh.finalGudok.item.model.vo.Cart;
 import com.kh.finalGudok.item.model.vo.Heart;
 
+import com.kh.finalGudok.item.model.vo.Image;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.ItemListView;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.item.model.vo.Review;
+import com.kh.finalGudok.item.model.vo.ReviewImage;
+import com.kh.finalGudok.item.model.vo.ReviewView;
 import com.kh.finalGudok.member.model.vo.Member;
 
 public interface ItemService {
@@ -38,7 +42,7 @@ public interface ItemService {
 
 	int getEventCount();
 
-	ArrayList<Event> selectEventListA(PageInfo pi);
+	ArrayList<BannerItem> selectEventListA(PageInfo pi);
 
 	ArrayList selectEventListCount(PageInfo pi);
 
@@ -52,9 +56,7 @@ public interface ItemService {
 
 	Event selectDeleteEvent(int i);
 
-	int updateEventStatusY(int i);
-
-	int updateEventStatusN(int i);
+	int updateEventStatusY(ArrayList<Event> dEventArr);
 
 
 	ArrayList<Review> selectAllReview(int itemNo);
@@ -117,5 +119,122 @@ public interface ItemService {
 	int diListCount();
 
 	ArrayList<ItemListView> selectDiList(PageInfo pi);
+
+	ArrayList<ItemListView> selectDLists(PageInfo pi,String sortNo);
+
+	ArrayList<ItemListView> selectMLists(PageInfo pi, String sortNo);
+
+	ArrayList<ItemListView> selectBLists(PageInfo pi, String sortNo);
+
+	ArrayList<ItemListView> selectSLists(PageInfo pi, String sortNo);
+
+	ArrayList<ItemListView> selectHLists(PageInfo pi, String sortNo);
+
+	ArrayList<ItemListView> selectDiLists(PageInfo pi, String sortNo);
+
+	int insertReviewImage1(Image i);
+
+	int insertReviewImage2(Image i);
+
+	int insertRI(ReviewImage ri);
+
+	int livingCateCount(String catecoryNo);
+
+	ArrayList<ItemListView> livingCateList(PageInfo pi, String categoryNo, String sortNo);
+
+	ArrayList<Item> selectNewList(PageInfo pi, String sortNo);
+
+	ArrayList<Item> selectEventList(PageInfo pi, String sortNo);
+
+	ArrayList<ReviewView> selectReviewDetail(int reviewNo);
+
+	ArrayList<Item> selectLivingList(PageInfo pi, String sortNo);
+
+	ArrayList<Item> selectList(PageInfo pi, String sortNo);
+
+	int reviewUpdate(Review r);
+
+	ArrayList<ReviewView> selectAllReviewImg(int itemNo);
+
+	int reviewDelete(int reviewNo);
+
+	Item reviewItemName(int itemNo);
+
+	ArrayList<ReviewView> selectDeleteReview(int reviewNo);
+
+	int reviewImageDelete(int reviewNo);
+
+	int imageDelete(int reviewNo);
+
+	int checkImage(int reviewNo);
+
+	int updateReviewRate0(int itemNo);
+
+
+//	int l1Count();
+//
+//	int l2Count();
+//
+//	int l3Count();
+//
+//	ArrayList<ItemListView> l1List(PageInfo pi, String sortNo);
+//
+//	ArrayList<ItemListView> l2List(PageInfo pi, String sortNo);
+//
+//	ArrayList<ItemListView> l3List(PageInfo pi, String sortNo);
+	
+	int updateEventStatusN(ArrayList<Event> dEventArr);
+
+	int getbannerItemCount(int eventNo);
+
+	ArrayList<BannerItem> selectBannerItem(int eventNo, PageInfo pi);
+
+	ArrayList<BannerItem> selectItemListA(PageInfo pi);
+
+	int deleteBannerItem(int[] dEventArr);
+
+
+	int updateItemStatusY(ArrayList<BannerItem> iArr);
+
+	int updateItemStatusN(ArrayList<BannerItem> iArr);
+
+	BannerItem selectAdminItem(int itemNo);
+
+	int updateItem(BannerItem i);
+
+	int deleteEventItem(BannerItem i);
+
+	int updateItemImg(BannerItem i);
+
+	int selectImageNo(BannerItem i);
+
+	int getItemCountA();
+
+	BannerItem selectDeleteItem(int i);
+
+	int deleteItemA(int i);
+
+	int deleteImgA(int i);
+
+	int deleteItemImgA(int i);
+
+	int deleteItemEvent(int i);
+
+	ArrayList<BannerItem> selectEventOption();
+
+	ArrayList<BannerItem> selectItems(PageInfo pi);
+
+	int getNonEventItemCnt();
+
+	int updateItemEventStatus(int i);
+
+	int insertEventItem(BannerItem i);
+
+	int deleteEventItemBefore(BannerItem i);
+
+	
+
+
+
 
 }

@@ -6,18 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.finalGudok.item.model.dao.ItemDao;
-
 import com.kh.finalGudok.item.model.vo.AdminItem;
-import com.kh.finalGudok.item.model.vo.Event;
-
+import com.kh.finalGudok.item.model.vo.BannerItem;
 import com.kh.finalGudok.item.model.vo.Board;
 import com.kh.finalGudok.item.model.vo.Cart;
+import com.kh.finalGudok.item.model.vo.Event;
 import com.kh.finalGudok.item.model.vo.Heart;
-
+import com.kh.finalGudok.item.model.vo.Image;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.ItemListView;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.item.model.vo.Review;
+
+import com.kh.finalGudok.item.model.vo.ReviewImage;
+import com.kh.finalGudok.item.model.vo.ReviewView;
 import com.kh.finalGudok.member.model.vo.Member;
 
 @Service("iService")
@@ -83,13 +85,16 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public ArrayList<Event> selectEventListA(PageInfo pi) {
+
+
+	public ArrayList<BannerItem> selectEventListA(PageInfo pi) {
+
 		return iDao.selectEventListA(pi);
 	}
 
 	@Override
 	public ArrayList selectEventListCount(PageInfo pi) {
-		return iDao.selecctEventListCount(pi);
+		return iDao.selectEventListCount(pi);
 	}
 
 
@@ -118,16 +123,7 @@ public class ItemServiceImpl implements ItemService {
 		return iDao.selectDeleteEvent(i);
 	}
 
-	@Override
-	public int updateEventStatusY(int i) {
-		return iDao.updateEventStatusY(i);
-	}
-
-	@Override
-	public int updateEventStatusN(int i) {
-		return iDao.updateEventStatusN(i);
-	}
-
+	
 	public ArrayList<Review> selectAllReview(int itemNo) {
 		return iDao.selectAllReview(itemNo);
 	}
@@ -271,5 +267,315 @@ public class ItemServiceImpl implements ItemService {
 	public ArrayList<ItemListView> selectDiList(PageInfo pi) {
 		return iDao.selectDiList(pi);
 	}
+
+	@Override
+	public ArrayList<ItemListView> selectDLists(PageInfo pi,String sortNo) {
+		return iDao.selectDLists(pi,sortNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> selectMLists(PageInfo pi, String sortNo) {
+		return iDao.selectMLists(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> selectBLists(PageInfo pi, String sortNo) {
+		return iDao.selectBLists(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> selectSLists(PageInfo pi, String sortNo) {
+		return iDao.selectSLists(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> selectHLists(PageInfo pi, String sortNo) {
+		return iDao.selectHLists(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> selectDiLists(PageInfo pi, String sortNo) {
+		return iDao.selectDiLists(pi, sortNo);
+	}
+
+	@Override
+	public int insertReviewImage1(Image i) {
+		return iDao.insertReviewImage1(i);
+	}
+
+	@Override
+	public int insertReviewImage2(Image i) {
+		return iDao.insertReviewImage2(i);
+	}
+	
+	@Override
+	public int insertRI(ReviewImage ri) {
+		return iDao.insertRI(ri);
+	}
+
+	@Override
+	public int livingCateCount(String categoryNo) {
+		return iDao.livingCateCount(categoryNo);
+	}
+
+	@Override
+	public ArrayList<ItemListView> livingCateList(PageInfo pi, String categoryNo, String sortNo) {
+		return iDao.livingCateList(pi, categoryNo, sortNo);
+	}
+
+	@Override
+	public ArrayList<Item> selectNewList(PageInfo pi, String sortNo) {
+		return iDao.selectNewList(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<Item> selectEventList(PageInfo pi, String sortNo) {
+		return iDao.selectEventList(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<ReviewView> selectReviewDetail(int reviewNo) {
+		return iDao.selectReviewDetail(reviewNo);
+	}
+
+	@Override
+	public ArrayList<Item> selectLivingList(PageInfo pi, String sortNo) {
+		return iDao.selectLivingList(pi, sortNo);
+	}
+
+	@Override
+	public ArrayList<Item> selectList(PageInfo pi, String sortNo) {
+		return iDao.selectList(pi, sortNo);
+	}
+
+	@Override
+	public int reviewUpdate(Review r) {
+		return iDao.reviewUpdate(r);
+	}
+
+	@Override
+	public ArrayList<ReviewView> selectAllReviewImg(int itemNo) {
+		return iDao.selectAllReviewImg(itemNo);
+	}
+
+	@Override
+	public int reviewDelete(int reviewNo) {
+		return iDao.reviewDelete(reviewNo);
+	}
+
+	@Override
+	public Item reviewItemName(int itemNo) {
+		return iDao.reviewItemName(itemNo);
+	}
+
+	@Override
+	public ArrayList<ReviewView> selectDeleteReview(int reviewNo) {
+		return iDao.selectDeleteReview(reviewNo);
+	}
+
+	@Override
+	public int reviewImageDelete(int reviewNo) {
+		return iDao.reviewImageDelete(reviewNo);
+	}
+
+	@Override
+	public int imageDelete(int reviewNo) {
+		return iDao.imageDelete(reviewNo);
+	}
+
+	@Override
+	public int checkImage(int reviewNo) {
+		return iDao.checkImage(reviewNo);
+	}
+
+	@Override
+	public int updateReviewRate0(int itemNo) {
+		return iDao.updateReviewRate0(itemNo);
+	}
+
+
+//	@Override
+//	public int l1Count() {
+//		return iDao.l1Count();
+//	}
+//
+//	@Override
+//	public int l2Count() {
+//		return iDao.l2Count();
+//	}
+//
+//	@Override
+//	public int l3Count() {
+//		return iDao.l3Count();
+//	}
+//
+//	@Override
+//	public ArrayList<ItemListView> l1List(PageInfo pi, String sortNo) {
+//		return iDao.l1List(pi, sortNo);
+//	}
+//
+//	@Override
+//	public ArrayList<ItemListView> l2List(PageInfo pi, String sortNo) {
+//		return iDao.l2List(pi, sortNo);
+//	}
+//
+//	@Override
+//	public ArrayList<ItemListView> l3List(PageInfo pi, String sortNo) {
+//		return iDao.l3List(pi, sortNo);
+//	}
+	
+	@Override
+	public int updateEventStatusN(ArrayList<Event> dEventArr) {
+		return iDao.updateEventStatusN(dEventArr);
+	}
+	
+	@Override
+	public int updateEventStatusY(ArrayList<Event> dEventArr) {
+		return iDao.updateEventStatusY(dEventArr);
+	}
+
+
+
+	@Override
+	public int getbannerItemCount(int eventNo) {
+		
+		return iDao.selectBannerItemCount(eventNo);
+	}
+
+	@Override
+	public ArrayList<BannerItem> selectBannerItem(int eventNo, PageInfo pi) {
+		
+		return iDao.selectBannerItem(eventNo,pi);
+	}
+
+	@Override
+	public ArrayList<BannerItem> selectItemListA(PageInfo pi) {
+		return iDao.selectItemListA(pi);
+	}
+
+	@Override
+	public int deleteBannerItem(int[] dEventArr) {
+		
+		return iDao.deleteBannerItem(dEventArr);
+	}
+
+
+	@Override
+	public int updateItemStatusY(ArrayList<BannerItem> iArr) {
+
+		return iDao.updateItemStatusY(iArr);
+	}
+
+	@Override
+	public int updateItemStatusN(ArrayList<BannerItem> iArr) {
+
+		return iDao.updateItemStatusN(iArr);
+	}
+
+	@Override
+	public BannerItem selectAdminItem(int itemNo) {
+		
+		return iDao.selectAdminItem(itemNo);
+	}
+
+	@Override
+	public int updateItem(BannerItem i) {
+		
+		return iDao.updateitem(i);
+	}
+
+	@Override
+	public int deleteEventItem(BannerItem i) {
+		
+		return iDao.deleteEventItem(i);
+	}
+
+	@Override
+	public int updateItemImg(BannerItem i) {
+		
+		return iDao.updateItemImg(i);
+	}
+
+	@Override
+	public int selectImageNo(BannerItem i) {
+		return iDao.selectImageNo(i);
+	}
+
+	@Override
+	public int getItemCountA() {
+		
+		return iDao.selectItemCountA();
+	}
+
+	@Override
+	public BannerItem selectDeleteItem(int i) {
+		
+		return iDao.selectDeleteItem(i);
+	}
+
+	@Override
+	public int deleteItemA(int i) {
+		
+		return iDao.deleteItemA(i);
+	}
+
+	@Override
+	public int deleteImgA(int i) {
+		return iDao.deleteImgA(i);
+	}
+
+	@Override
+	public int deleteItemImgA(int i) {
+		return iDao.deleteItemImgA(i);
+	}
+
+	@Override
+	public int deleteItemEvent(int i) {
+
+		return iDao.deleteItemEvent(i);
+	}
+
+	@Override
+	public ArrayList<BannerItem> selectEventOption() {
+		return iDao.selectEventOption();
+	}
+
+	@Override
+	public ArrayList<BannerItem> selectItems(PageInfo pi) {
+		return iDao.selectItems(pi);
+	}
+
+	@Override
+	public int getNonEventItemCnt() {
+		return iDao.selectNonEventItemCnt();
+	}
+
+	@Override
+	public int updateItemEventStatus(int i) {
+		return iDao.updateItemEventStatus(i);
+	}
+
+	@Override
+	public int insertEventItem(BannerItem i) {
+
+		return iDao.insertEventItem(i);
+	}
+
+	@Override
+	public int deleteEventItemBefore(BannerItem i) {
+	
+		return iDao.deleteEventItemBefor(i);
+	}
+
+
+	
+
+	
+	
+	
+	
+
+
+
 
 }
