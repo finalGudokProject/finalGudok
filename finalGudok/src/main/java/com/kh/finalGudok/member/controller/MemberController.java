@@ -58,8 +58,8 @@ import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
 import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
-import com.kh.finalGudok.member.model.vo.Withdrawal;
 import com.kh.finalGudok.member.model.vo.Tempkey;
+import com.kh.finalGudok.member.model.vo.Withdrawal;
 
 @SessionAttributes("loginUser")
 @Controller
