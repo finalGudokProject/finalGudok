@@ -1089,9 +1089,9 @@ public class BoardController {
 			// 비공개, 공개, 답변상태를 표기하기 위한 ArrayList
 			ArrayList<secret> list2 = bService.selectListInquiry2(pi);
 			ArrayList<Inquiry> list3 = bService.selectListInquiry3(pi);
-			System.out.println("list1 : " + list1);
-			System.out.println("list2 : " + list2);
-			System.out.println("list3 : " + list3);
+			System.out.println("list1 : " + list1.size());
+			System.out.println("list2 : " + list2.size());
+			System.out.println("list3 : " + list3.size());
 			
 			if(list1 != null && list2 != null && list3 != null) {
 				mv.addObject("list1",list1);
@@ -1315,7 +1315,7 @@ public class BoardController {
 				
 				
 		// event
-		// eventList
+		// List
 				@RequestMapping("eventList.do")
 				public ModelAndView eventList(ModelAndView mv, 
 						@RequestParam(value="page", required=false) Integer page) {	// 기본 자료형으로 받을 수 없기 때문에 Integer를 쓴다
@@ -1347,7 +1347,7 @@ public class BoardController {
 					return mv;
 				}
 				
-		// eventDetail
+		// Detail
 				@RequestMapping("eventDetail")
 				public ModelAndView eventDetail(ModelAndView mv, int bBoard_no, @RequestParam("page") Integer page) {
 					int currentPage = page;

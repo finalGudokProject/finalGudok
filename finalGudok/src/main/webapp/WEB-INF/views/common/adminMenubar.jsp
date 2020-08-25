@@ -503,8 +503,8 @@ label > span {
                                   <ul class="group-list sd_ul">
                                     <li><a href="adminNoticeList.do">공지사항</a></li>
                                     <li><a href="adminFAQList.do">FAQ</a></li>
-                                    <li><a href="adminProductProposalList.do">상품제안</a></li>
                                     <li><a href="adminInquiryList.do">1:1 문의</a></li>
+                                    <li><a href="adminProductProposalList.do">상품제안</a></li>
                                     <li><a href="adminEventList.do">이벤트</a></li>
                                   </ul>
                                 </li>

@@ -130,18 +130,18 @@
       <form action="inquiryList.do" method="post" enctype="multipart/form-data">
         
           <div style="font-size: 30px;">1:1 문의</div>
-        <div class="input-group" >
-          <select class="custom-select" id="inputGroupSelect04" style="margin-left: 500px; width:100px">
-            <option selected>모두</option>
-            <option value="1">제목</option>
-            <option value="2">내용</option>
-            <option value="3">제목+내용</option>
-          </select>
-          <input type="text" class="form-control" style="float:right; width:100px;height: 38px;">
-          <div class="input-group-append" style="float:right; width: 55px; height: 38px;">
-            <button type="button" class="btn btn-primary" >검색</button>
-          </div>
-        </div>
+       <div class="input-group">
+            <select class="custom-select" id="inputGroupSelect04" style="margin-left: 500px; width:100px">
+              <option selected>모두</option>
+              <option value="1">제목</option>
+              <option value="2">내용</option>
+              <option value="3">제목+내용</option>
+            </select>
+            <input type="text" class="form-control" style="float:right; width:170px;height: 38px;">
+            <div class="input-group-append" style="float:right; width: 55px; height: 38px;">
+              <input type="button" value="검색" class="btn btn-primary" >
+            </div>
+            </div>
          
         
         <table style="text-align: center; margin-top:15px">
@@ -159,19 +159,18 @@
 	      			<c:when test="${fn:length(list1)>0}">
 			        	<c:forEach var="b" items="${list1 }" varStatus="cnt">
 							<tr>
-								<td><input type="checkbox"></td>
 								<td align="center">${b.rownum }</td>
 								<td align="center">
-									<c:url var="adminInquiryDetail" value="adminInquiryDetail.do">
+									<c:url var="inquiryDetail" value="inquiryDetail.do">
 										<c:param name="bBoard_no" value="${b.bBoard_no }"/>
 										<c:param name="page" value="${pi.currentPage }"/>
 									</c:url>
 									<c:choose>
 									<c:when test="${list2[cnt.index] eq 'secret [oBoard_no=0, oSecret=Y, oSecret_pwd=null]'}">
-									<a href="${adminInquiryDetail }">[공개] ${b.bTitle }</a>
+									<a href="${inquiryDetail }">[공개] ${b.bTitle }</a>
 									</c:when>
 									<c:otherwise>
-									<a href="${adminInquiryDetail }">[비공개] ${b.bTitle }</a>
+									<a href="${inquiryDetail }">[비공개] ${b.bTitle }</a>
 									</c:otherwise>
 									</c:choose>
 								</td>
