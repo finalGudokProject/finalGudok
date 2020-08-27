@@ -272,7 +272,12 @@ input[type=button]:hover:before,input[type=button]:hover:after{
 					</c:if>
 					</div>
 					<div class="col-md-6" style="padding:0 15px;font-size:20px;">
+					<c:if test="${empty ilv.itemMemo }">
+						${ilv.itemName }입니다.
+					</c:if>
+					<c:if test="${!empty ilv.itemMemo }">
 						${ilv.itemMemo }
+					</c:if>
 					</div>
 					<div class="col-md-6" style="padding-right:4%;text-align:right;">
 						<span style="text-align:right;" id="whatSpan" data-toggle="modal" data-target="#intro" title="상품 문의"><img id="whatImg"src="${contextPath }/resources/images/what.png" style="width:35px;height:35px;border:2px solid black;border-radius:5px;display:inline-block;vertical-align:middle;"></span>
