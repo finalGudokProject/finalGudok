@@ -1,46 +1,73 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Insert title here</title>
-</head>
-<link rel="shortcut icon" type="image⁄x-icon" href="<%=request.getContextPath()%>/images/logo.png">
-	<!-- 제이쿼리 -->
-	 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<!-- 아이콘 -->
-	<script src="https://kit.fontawesome.com/4b6b63d8f6.js" crossorigin="anonymous"></script>
-	<!-- 부트스트랩 -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<!-- popper 툴팁 -->
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<!-- 부트스트랩 스크립트(jQuery보다 아래 있어야함) -->
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-	<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-	
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<!-- <meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+Bootstrap CSS
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous"> -->
+
+<title>Menubar</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
+/*폰트 적용*/
+body {
+	font-family: 'Jua', sans-serif;
+	color: #495057;
+}
+
+
+h3 {
+	color: black;
+}
+
+section {
+	margin-bottom: 50px;
+}
+
 /*상단 회원가입, 로그인, 고객센터 메뉴(#menu-list) */
-#menu-list {
+.menu-list {
 	line-height: 3;
 	text-align: right;
 }
 
-#menu-list>li {
+.menu-list>li {
 	display: inline-block;
 	margin-right: 50px;
 }
 
-#menu-list a {
+.menu-list a {
+	color: #495057;;
+}
+
+.menu-list a:hover {
 	color: black;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 /*나비바 각 카테고리(a태그) 간격조정*/
 .nav-link {
 	margin: 0 60px 0 60px;
+	color: #495057 !important;
+}
+
+.nav-link:hover {
 	color: black;
+}
+
+/*나비바 각 카테고리(글씨, 아이콘) 가운데 정렬*/
+.nav-item {
+	text-align: center;
+	color: #495057;
 }
 
 .nav-item:hover {
@@ -52,9 +79,12 @@
 	margin-left: 50px;
 }
 
-/*나비바 각 카테고리(글씨, 아이콘) 가운데 정렬*/
-.nav-item {
-	text-align: center;
+.nav-item a {
+	color: #495057;
+}
+
+.nav-item>a:hover {
+	color: black !important;
 }
 
 /*검색바 마진 설정*/
@@ -63,6 +93,7 @@
 	margin-right: 50px;
 }
 
+/* 푸드, 리빙 카테고리 드롭다운 설정*/
 #food-menu, #living-menu {
 	background-color: #f8f9fa;
 	margin-left: 10px;
@@ -74,81 +105,94 @@
 	display: block;
 }
 
+.dropdown-item {
+	color: #495057;
+}
+
+.dropdown-item:hover {
+	color: black;
+}
+
 .form-inline my-2 my-lg-0>input {
 	margin-left: 50px;
 }
-/*폰트 적용*/
-body {
-	font-family: 'Jua', sans-serif;
+
+/*버튼 css 설정*/
+.btn {
+	border-color: #ced4da;
+	color: #495057;
+}
+
+.btn:hover {
+	border-color: black;
+	color: black;
+}
+
+::placeholder {
+	font-size: small;
+}
+
+#cardWrap>a {
+	color: #495057 !important;
+}
+
+a:hover {
+	text-decoration: none;
+	color: black;
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
 	rel="stylesheet">
 </head>
 <body>
-	<c:set var="contextPath" value="${pageContext.servletContext.contextPath }" scope="application"/>
-	
-<div id="userMenu">
-      <ul id="menu-list">
-        <li>
-          <a href="#">회원가입</a>
-        </li>
-        <c:if test="${empty loginUser}">
-        <li>
-        <form action="login.do" method="post">
-        <input type="text" name="memberId">
-        <input type="password" name="memberPwd">
-          <button id="login">로그인</button>
-        </form>
-        </li>
-        </c:if>
-        
-        <c:if test="${!empty loginUser}">
-        <li>
-          <button id="login" class="logoutBtn">${loginUser.memberId } + 로그아웃</button>
-        </li>
-        </c:if>
-        <script>
-        	$(function(){
-        		$(".logoutBtn").on("click", function(){
-        			location.href="logout.do"
-        		})
-        	})
-        </script>
-        <li>
-          <a href="#">고객센터</a>
-        </li>
-        <li>
-          <a href="#">Who is JH?</a>
-        </li>
-      </ul>
+	<c:set var="contextPath"
+		value="${pageContext.servletContext.contextPath }" scope="application" />
+	<div class="userMenu">
+		<c:if test="${empty sessionScope.loginUser }">
+			<ul class="menu-list">
+				<li><a href="moveToSignUp.do">회원가입</a></li>
+				<li><a href="moveToLogin.do">로그인</a></li>
+				<li><a href="noticeList.do">고객센터</a></li>
+				<li><a href="#">Who is JH?</a></li>
+				<li><a href="payment.do">결제페이지</a>
+			</ul>
+		</c:if>
+		<c:if test="${!empty sessionScope.loginUser }">
+			<ul class="menu-list">
+				<li><c:out value="${loginUser.memberName }님 환영합니다" /></li>
+				<c:url var="elist" value="pointList.do">
+					<c:param name="memberNo" value="${loginUser.memberNo}"/>
+				</c:url> 
+				<li><a href="${elist}">마이페이지</li>
+				<li><a href="logout.do">로그아웃</a></li>
+				<li><a href="noticeList.do">고객센터</a></li>
+				<li><a href="#">Who is JH?</a></li>
+				<li><a href="payment.do">결제페이지</a>
+			</ul>
+		</c:if>
+	</div>
 
-    </div> 
-    <div class="container">
-        <div class="row">
-            <div class="col-12" align="center" id="homeLogo">
-                <img src="resources/images/logo.png" width="220px" height="150px">
-            </div>
-        </div>
-    </div>
-    <script>
-    	$(function(){
-    		$("#homeLogo").on("click", function(){
-    			location.href="home.do";
-    		}).mouseenter(function(){
-    			$(this).css("cursor","pointer");
-    		})
-    	})
-    </script>
-    <br>
 
-    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
-        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	<div class="container">
+		<div class="row">
+			<div class="col-12" align="center">
+				<a href="home.do"><img src="resources/images/logo.png"
+					width="220px" height="150px"></a>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+		<!-- <a class="navbar-brand" href="#">Navbar</a> -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- <ul class="navbar-nav mr-auto"> -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -197,10 +241,46 @@ body {
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
         </div>
-      </nav>
+	</nav>
+	<!-- <script>
+		// When the user scrolls the page, execute myFunction
+		window.onscroll = function() {
+			myFunction()
+		};
 
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    
+		// Get the header
+		var header = document.getElementById("navbar");
+
+		// Get the offset position of the navbar
+		var sticky = header.offsetTop;
+
+		// Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+		function myFunction() {
+			if (window.pageYOffset > sticky) {
+				header.classList.add("sticky");
+			} else {
+				header.classList.remove("sticky");
+			}
+		}
+	</script> -->
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!-- 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script> -->
+	<script
+       src="https://code.jquery.com/jquery-3.4.1.min.js"
+       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+       crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+		crossorigin="anonymous"></script>
 </body>
 </html>

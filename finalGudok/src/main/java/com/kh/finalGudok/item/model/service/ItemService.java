@@ -2,9 +2,14 @@ package com.kh.finalGudok.item.model.service;
 
 import java.util.ArrayList;
 
+import com.kh.finalGudok.item.model.vo.AdminItem;
+import com.kh.finalGudok.item.model.vo.BannerItem;
+import com.kh.finalGudok.item.model.vo.Event;
+
 import com.kh.finalGudok.item.model.vo.Board;
 import com.kh.finalGudok.item.model.vo.Cart;
 import com.kh.finalGudok.item.model.vo.Heart;
+
 import com.kh.finalGudok.item.model.vo.Image;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.ItemListView;
@@ -25,6 +30,34 @@ public interface ItemService {
 	ItemListView selectItem(int itemNo);
 
 	ArrayList<Review> selectReview(int itemNo);
+
+
+	int insertItem(AdminItem i);
+
+	int insertImage(AdminItem i);
+
+	int insertEvent(Event e);
+
+	int insertEventImg(Event e);
+
+	int getEventCount();
+
+	ArrayList<BannerItem> selectEventListA(PageInfo pi);
+
+	ArrayList selectEventListCount(PageInfo pi);
+
+	int deleteEvent(int dEventArr);
+
+	int deleteEventItem(int i);
+
+	int deleteEventImg(int i);
+
+	int deleteEventBannerImg(int i);
+
+	Event selectDeleteEvent(int i);
+
+	int updateEventStatusY(ArrayList<Event> dEventArr);
+
 
 	ArrayList<Review> selectAllReview(int itemNo);
 
@@ -150,4 +183,58 @@ public interface ItemService {
 //
 //	ArrayList<ItemListView> l3List(PageInfo pi, String sortNo);
 	
+	int updateEventStatusN(ArrayList<Event> dEventArr);
+
+	int getbannerItemCount(int eventNo);
+
+	ArrayList<BannerItem> selectBannerItem(int eventNo, PageInfo pi);
+
+	ArrayList<BannerItem> selectItemListA(PageInfo pi);
+
+	int deleteBannerItem(int[] dEventArr);
+
+
+	int updateItemStatusY(ArrayList<BannerItem> iArr);
+
+	int updateItemStatusN(ArrayList<BannerItem> iArr);
+
+	BannerItem selectAdminItem(int itemNo);
+
+	int updateItem(BannerItem i);
+
+	int deleteEventItem(BannerItem i);
+
+	int updateItemImg(BannerItem i);
+
+	int selectImageNo(BannerItem i);
+
+	int getItemCountA();
+
+	BannerItem selectDeleteItem(int i);
+
+	int deleteItemA(int i);
+
+	int deleteImgA(int i);
+
+	int deleteItemImgA(int i);
+
+	int deleteItemEvent(int i);
+
+	ArrayList<BannerItem> selectEventOption();
+
+	ArrayList<BannerItem> selectItems(PageInfo pi);
+
+	int getNonEventItemCnt();
+
+	int updateItemEventStatus(int i);
+
+	int insertEventItem(BannerItem i);
+
+	int deleteEventItemBefore(BannerItem i);
+
+	
+
+
+
+
 }

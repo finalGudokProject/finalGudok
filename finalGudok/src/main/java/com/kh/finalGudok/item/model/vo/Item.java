@@ -20,9 +20,12 @@ public class Item implements Serializable{
 	private Date itemDate;
 	private String itemRecommend;
 	private String categoryNo;
+
 	private String itemMemo;
 	private String itemEventStatus;
 	private String sortNo;
+	private int eventNo;
+
 	public Item() {
 		// TODO Auto-generated constructor stub
 	}
@@ -45,6 +48,7 @@ public class Item implements Serializable{
 		this.itemEventStatus = itemEventStatus;
 		this.sortNo = sortNo;
 	}
+
 	public int getItemNo() {
 		return itemNo;
 	}
@@ -129,9 +133,11 @@ public class Item implements Serializable{
 	public void setSortNo(String sortNo) {
 		this.sortNo = sortNo;
 	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
 	@Override
 	public String toString() {
 		return "Item [itemNo=" + itemNo + ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", itemCount="
@@ -140,7 +146,5 @@ public class Item implements Serializable{
 				+ itemRecommend + ", categoryNo=" + categoryNo + ", itemMemo=" + itemMemo + ", itemEventStatus="
 				+ itemEventStatus + ", sortNo=" + sortNo + "]";
 	}
-	
-	
 	
 }
