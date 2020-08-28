@@ -183,7 +183,10 @@
                 <a href="#home"><img src="resources/images/delivery.png"
                         style="width: 25%; height: 25%; margin-right: 4%;">구독배송</a>
                 <ul>
-                    <li><a href="#">구독 조회</a></li>
+                	<c:url var="slist" value="subscribeList.do">
+						<c:param name="memberNo" value="${loginUser.memberNo}"/>
+					</c:url> 
+                    <li><a href="${slist}">구독 조회</a></li>
                     <c:url var="dlist" value="deliveryList.do">
 						<c:param name="memberNo" value="${loginUser.memberNo}"/>
 					</c:url> 

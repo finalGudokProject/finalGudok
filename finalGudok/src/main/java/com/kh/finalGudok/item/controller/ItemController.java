@@ -50,6 +50,11 @@ public class ItemController {
 	@Autowired
 	ItemService iService;
 	
+	@RequestMapping("payPop.do")
+	private String payPop() {
+		return "items/payPop";
+	}
+	
 	@RequestMapping("itemNew.do")
 	private ModelAndView itemNew(ModelAndView mv, @RequestParam(value="page",required=false)Integer page, String sortNo) {
 		int currentPage = 1;
@@ -1471,6 +1476,13 @@ public class ItemController {
 				throw new ItemException("리스트 갱신 실패!");
 			}
 		
+		}
+		
+		@RequestMapping("payment.do")
+		public String payment() {
+			
+			
+			return null;
 		}
 		
 		

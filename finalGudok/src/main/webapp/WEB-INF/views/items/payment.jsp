@@ -74,7 +74,8 @@
                     </tr>
                     <tr>
                         <td>받는 사람</td>
-                        <td><input type="text" placeholder="이름을 입력하세요" autofocus></td>
+                        <td>${loginUser.memberName }</td>
+                        <td><button class="btn">수정하기</button>
                     </tr>
                     <tr>
                         <td>연락처</td>
@@ -86,7 +87,8 @@
                     </tr>
                     <tr>
                         <td>주소</td>
-                        <td><input type="text">&nbsp;<button type="button" class="btn">주소 변경</button></td>
+                        <td>${loginUser.address2 }<br>${loginUser.address3 }</td>
+                        <td><button type="button" class="btn">주소 변경</button></td>
                     </tr>
                     <tr>
                         <td>배송 요청사항</td>
@@ -129,7 +131,7 @@
                     </tr>
                     <tr>
                         <td colspan="3" align="center">
-                            <button type="submit" class="btn" id="payBtn">결제하기</button>
+                            <button type="submit" class="btn" id="payBtn" onclick="requestPay();">결제하기</button>
                             <button type="button" class="btn" id="goBackBtn">이전으로</button>
                         </td>
                     </tr>
@@ -142,7 +144,44 @@
     <footer>
         <jsp:include page="../common/footer.jsp" />
     </footer>
-
+  
+    <script>
+		function requestPay(){
+		var IMP = window.IMP; // 생략해도 괜찮습니다.
+		IMP.init("imp38859026"); // "imp00000000" 대신 발급받은 "가맹점 식별코드"를 사용합니다.
+		
+		// IMP.request_pay(param, callback) 호출
+		  IMP.request_pay({ // param
+			pg : "html5_inicis.INIBillTst", // 실제 계약 후에는 실제 상점아이디로 변경
+			pay_method : 'card', // 'card'만 지원됩니다.
+			merchant_uid : 'merchant_' + new Date().getTime(),
+			name : '최초인증결제',
+			amount : 0, // 결제창에 표시될 금액. 실제 승인이 이뤄지지는 않습니다. (모바일에서는 가격이 표시되지 않음)
+			customer_uid : 'your-customer-unique-id', //customer_uid 파라메터가 있어야 빌링키 발급을 시도합니다.
+			buyer_email : 'iamport@siot.do',
+			buyer_name : '아임포트',
+			buyer_tel : '02-1234-1234'
+		  }, function (rsp) { // callback
+		    if (rsp.success) {
+		    	alert("성공");
+		    	
+		    	jQuery.ajax({
+		            url: "payment.do", // 서비스 웹서버
+		            method: "POST",
+		            headers: { "Content-Type": "application/json" },
+		            data: {
+		              customer_uid: "your-customer-unique-id",
+		              // 카드(빌링키)와 1:1로 대응하는 값
+		            }
+		          });
+		    } else {
+		    	alert("실패");
+		    }
+		  });
+		}
+	</script>
+	
+	
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -154,6 +193,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js" ></script>
+  	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 </body>
 
 </html>

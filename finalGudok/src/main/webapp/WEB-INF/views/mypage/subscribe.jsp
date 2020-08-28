@@ -424,6 +424,7 @@
 	          </div>
 	        </div>
 	      </div>
+	      <div id="calendar" style="height: 600px;"></div>
 	      <div class="subscribe_list" style="width:80%;">
 	        <table>
 	          <tr>
@@ -517,5 +518,6 @@
     </div>
     <br style="clear:both;">
     <jsp:include page="../common/footer.jsp"/>
+    
 </body>
 </html>

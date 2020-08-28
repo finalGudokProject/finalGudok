@@ -39,7 +39,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
-//import com.kh.finalGudok.member.model.vo.Inquiry;
+
+import com.kh.finalGudok.member.model.vo.Inquiry;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.member.model.exception.MemberException;
@@ -48,16 +49,16 @@ import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
 import com.kh.finalGudok.member.model.vo.Cart;
-//import com.kh.finalGudok.member.model.vo.DeleteHeart;
+import com.kh.finalGudok.member.model.vo.DeleteHeart;
 import com.kh.finalGudok.member.model.vo.Delivery;
 import com.kh.finalGudok.member.model.vo.Exchange;
 import com.kh.finalGudok.member.model.vo.Grade;
 import com.kh.finalGudok.member.model.vo.Heart;
 import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
-//import com.kh.finalGudok.member.model.vo.Reply;
+import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
-//import com.kh.finalGudok.member.model.vo.Withdrawal;
+import com.kh.finalGudok.member.model.vo.Withdrawal;
 import com.kh.finalGudok.member.model.vo.Tempkey;
 
 @SessionAttributes("loginUser")
@@ -400,21 +401,21 @@ public class MemberController {
 	}
 	
 	// 문의 내역
-//	@RequestMapping(value="inquiryList.do")
-//	public ModelAndView inquiryList(ModelAndView mv, Integer memberNo) {
-//		ArrayList<Inquiry> list = mService.selectInquiryList(memberNo);
-//		
-//		System.out.println("1:1 문의 내역 : " + list);
-//		
-//		if(list != null) {
-//			mv.addObject("list", list);
-//			mv.setViewName("mypage/inquiry");
-//		} else {
-//			throw new MemberException("1:1 리스트 불러오기 실패");
-//		}
-//		
-//		return mv;
-//	}
+	@RequestMapping(value="inquiryList.do")
+	public ModelAndView inquiryList(ModelAndView mv, Integer memberNo) {
+		ArrayList<Inquiry> list = mService.selectInquiryList(memberNo);
+		
+		System.out.println("1:1 문의 내역 : " + list);
+		
+		if(list != null) {
+			mv.addObject("list", list);
+			mv.setViewName("mypage/inquiry");
+		} else {
+			throw new MemberException("1:1 리스트 불러오기 실패");
+		}
+		
+		return mv;
+	}
 	
 	// 교환 내역
 	@RequestMapping(value="exchangeList.do")
@@ -485,6 +486,7 @@ public class MemberController {
 		}
 	}
 
+	// 이메일 인증
 	@RequestMapping("emailDupCheck.do")
 	public ModelAndView emailDupCheck(ModelAndView mv, String email) {
 
@@ -527,29 +529,29 @@ public class MemberController {
 	}
 	
 	// 탈퇴하기
-//	@RequestMapping("withdrawalInsert.do")
-//	public String withdrawalInsert(HttpServletRequest request, Withdrawal w) {
-//		if(w.getSecessionCategory() == 1) {
-//			w.setSecessionContent("서비스가 마음에 들지 않음");
-//		} else if(w.getSecessionCategory() == 2) {
-//			w.setSecessionContent("가격이 비쌈");
-//		} else if(w.getSecessionCategory() == 3) {
-//			w.setSecessionContent("원하는 상품이 없음");
-//		} else if(w.getSecessionCategory() == 4) {
-//			w.setSecessionContent("개인정보보호를 위해");
-//		}
-//		
-//		System.out.println("탈퇴 내용 : " + w);
-//		
-//		int result = mService.insertSecession(w);
-//		int result2 = mService.updateMemberStatus(w.getMemberNo());
-//		
-//		if(result > 0 && result2 > 0) {
-//			return "home";
-//		} else {
-//			throw new MemberException("탈퇴 실패");
-//		}
-//	}
+	@RequestMapping("withdrawalInsert.do")
+	public String withdrawalInsert(HttpServletRequest request, Withdrawal w) {
+		if(w.getSecessionCategory() == 1) {
+			w.setSecessionContent("서비스가 마음에 들지 않음");
+		} else if(w.getSecessionCategory() == 2) {
+			w.setSecessionContent("가격이 비쌈");
+		} else if(w.getSecessionCategory() == 3) {
+			w.setSecessionContent("원하는 상품이 없음");
+		} else if(w.getSecessionCategory() == 4) {
+			w.setSecessionContent("개인정보보호를 위해");
+		}
+		
+		System.out.println("탈퇴 내용 : " + w);
+		
+		int result = mService.insertSecession(w);
+		int result2 = mService.updateMemberStatus(w.getMemberNo());
+		
+		if(result > 0 && result2 > 0) {
+			return "home";
+		} else {
+			throw new MemberException("탈퇴 실패");
+		}
+	}
 	
 	// 리뷰 삭제
 	@RequestMapping("mreviewDelete.do")
@@ -566,76 +568,76 @@ public class MemberController {
 	}
 	
 	// 찜 삭제
-//	@RequestMapping("heartDelete.do")
-//	@ResponseBody
-//	public String heartDelete(HttpSession session, HttpServletRequest request, @RequestParam(value="checkArr[]")List<String> heartList) {
-//		Member loginUser = (Member)session.getAttribute("loginUser");
-//		
-//		System.out.println("선택삭제 실행됨");
-//		
-//		System.out.println(heartList);
-//		
-//		DeleteHeart dh = new DeleteHeart();
-//		
-//		int heartNo;
-//		int memberNo = loginUser.getMemberNo();
-//		
-//		int result = 0;
-//		
-//		for(int i = 0; i <heartList.size(); i++) {
-//			heartNo = Integer.parseInt(heartList.get(i));
-//			dh.setHeartNo(heartNo);
-//			dh.setMemberNo(memberNo);
-//			result = mService.deleteHeart(dh);
-//			result += result;
-//		}
-//		
-//		if(result > 0) {			
-//			return "success";
-//		} else {
-//			throw new MemberException("찜 삭제 실패");
-//		}
-//	}
+	@RequestMapping("heartDelete.do")
+	@ResponseBody
+	public String heartDelete(HttpSession session, HttpServletRequest request, @RequestParam(value="checkArr[]")List<String> heartList) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		System.out.println("선택삭제 실행됨");
+		
+		System.out.println(heartList);
+		
+		DeleteHeart dh = new DeleteHeart();
+		
+		int heartNo;
+		int memberNo = loginUser.getMemberNo();
+		
+		int result = 0;
+		
+		for(int i = 0; i <heartList.size(); i++) {
+			heartNo = Integer.parseInt(heartList.get(i));
+			dh.setHeartNo(heartNo);
+			dh.setMemberNo(memberNo);
+			result = mService.deleteHeart(dh);
+			result += result;
+		}
+		
+		if(result > 0) {			
+			return "success";
+		} else {
+			throw new MemberException("찜 삭제 실패");
+		}
+	}
 	
-//	// 장바구니 삭제
-//	@RequestMapping("cartDelete.do")
-//	@ResponseBody
-//	public String cartDelete(HttpSession session, HttpServletRequest request, @RequestParam(value="checkArr[]")List<String> cartList) {
-//		Member loginUser = (Member)session.getAttribute("loginUser");
-//		
-//		System.out.println("선택삭제 실행됨");
-//		
-//		System.out.println(cartList);
-//		
-//		DeleteHeart dh = new DeleteHeart();
-//		
-//		int cartNo;
-//		
-//		int memberNo = loginUser.getMemberNo();
-//		
-//		int result = 0;
-//		
-//		for(int i = 0; i <cartList.size(); i++) {
-//			cartNo = Integer.parseInt(cartList.get(i));
-//			
-//			HashMap map = new HashMap<Integer, Integer>();
-//			
-//			map.put("cartNo", cartNo);
-//			map.put("memberNo", memberNo);
-//
-//			result = mService.deleteCart(map);
-//			
-//			result += result;
-//			
-//		}
-//		
-//		
-//		if(result > 0) {			
-//			return "success";
-//		} else {
-//			throw new MemberException("장바구니 삭제 실패");
-//		}
-//	}
+	// 장바구니 삭제
+	@RequestMapping("cartDelete.do")
+	@ResponseBody
+	public String cartDelete(HttpSession session, HttpServletRequest request, @RequestParam(value="checkArr[]")List<String> cartList) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		System.out.println("선택삭제 실행됨");
+		
+		System.out.println(cartList);
+		
+		DeleteHeart dh = new DeleteHeart();
+		
+		int cartNo;
+		
+		int memberNo = loginUser.getMemberNo();
+		
+		int result = 0;
+		
+		for(int i = 0; i <cartList.size(); i++) {
+			cartNo = Integer.parseInt(cartList.get(i));
+			
+			HashMap map = new HashMap<Integer, Integer>();
+			
+			map.put("cartNo", cartNo);
+			map.put("memberNo", memberNo);
+
+			result = mService.deleteCart(map);
+			
+			result += result;
+			
+		}
+		
+		
+		if(result > 0) {			
+			return "success";
+		} else {
+			throw new MemberException("장바구니 삭제 실패");
+		}
+	}
 	
 	// 장바구니 추가
 	@RequestMapping("addCart.do")
@@ -671,31 +673,31 @@ public class MemberController {
 		}
 	}
 	
-//	// 1:1문의 답변
-//	@RequestMapping("inquiryReply.do")
-//	@ResponseBody
-//	public void inquiryReply(HttpServletResponse response, HttpServletRequest request, Integer boardNo) throws JsonIOException, IOException {
-//		/*
-//		 * ArrayList<Delivery> list = mService.selectDeliveryList(memberNo);
-//		 * 
-//		 * System.out.println("배송 내역 : " + list);
-//		 * 
-//		 * if(list != null) { mv.addObject("list", list);
-//		 * mv.setViewName("mypage/delivery"); } else { throw new
-//		 * MemberException("배송 리스트 불러오기 실패"); }
-//		 * 
-//		 * return mv;
-//		 */
-//		
-//		Reply reply = mService.selectReply(boardNo);
-//		
-//		System.out.println("답변 내역  : " + reply);
-//		
-//		response.setContentType("application/json;charset=utf-8");
-//		
-//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-//		gson.toJson(reply, response.getWriter());
-//	}
+	// 1:1문의 답변
+	@RequestMapping("inquiryReply.do")
+	@ResponseBody
+	public void inquiryReply(HttpServletResponse response, HttpServletRequest request, Integer boardNo) throws JsonIOException, IOException {
+		/*
+		 * ArrayList<Delivery> list = mService.selectDeliveryList(memberNo);
+		 * 
+		 * System.out.println("배송 내역 : " + list);
+		 * 
+		 * if(list != null) { mv.addObject("list", list);
+		 * mv.setViewName("mypage/delivery"); } else { throw new
+		 * MemberException("배송 리스트 불러오기 실패"); }
+		 * 
+		 * return mv;
+		 */
+		
+		Reply reply = mService.selectReply(boardNo);
+		
+		System.out.println("답변 내역  : " + reply);
+		
+		response.setContentType("application/json;charset=utf-8");
+		
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		gson.toJson(reply, response.getWriter());
+	}
 	
 	// 비밀번호 변경
 	@RequestMapping("modifyPassword.do")
@@ -1327,5 +1329,10 @@ public class MemberController {
 
 		}
 		return mv;
+	}
+	
+	@RequestMapping(value = "subscribeList.do")
+	public String subscribeList() {
+		return "mypage/subscribe";
 	}
 }
