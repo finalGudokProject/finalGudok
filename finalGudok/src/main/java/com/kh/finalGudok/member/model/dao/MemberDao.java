@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.PageInfo;
+import com.kh.finalGudok.member.model.vo.AdminExchange;
 import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
+import com.kh.finalGudok.member.model.vo.AdminSubscribe;
 import com.kh.finalGudok.member.model.vo.Cart;
 import com.kh.finalGudok.member.model.vo.DeleteHeart;
 import com.kh.finalGudok.member.model.vo.Delivery;
@@ -24,6 +26,7 @@ import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
 import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
+import com.kh.finalGudok.member.model.vo.Search;
 import com.kh.finalGudok.member.model.vo.Withdrawal;
 
 @Repository("mDao")
@@ -226,4 +229,64 @@ public class MemberDao {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSessionTemplate.selectList("memberMapper.selectMemberSecession",null,rowBounds);
 	}
+
+	public ArrayList<AdminSubscribe> selectOrderList(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSessionTemplate.selectList("memberMapper.selectOrderList",null,rowBounds);
+	}
+
+	public int selectOrderCnt() {
+		return sqlSessionTemplate.selectOne("memberMapper.selectOrderCnt");
+	}
+
+	public int updateDelivery(ArrayList<AdminSubscribe> dArr) {
+		return sqlSessionTemplate.update("memberMapper.updateDelivery",dArr);
+	}
+
+	public AdminSubscribe selectOrder(int subscribeNo) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectOrder",subscribeNo);
+	}
+
+	public AdminPayment selectPayment(int subscribeNo) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectPayment",subscribeNo);
+	}
+
+	public int selectTotalPayment(int subscribeNo) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectTotalPayment",subscribeNo);
+	}
+
+	public int selectItemTotalP(int subscribeNo) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectItemTotalP",subscribeNo);
+	}
+
+	public int updateSubscribeA(Integer subscribeNo) {
+		return sqlSessionTemplate.update("memberMapper.updateSubscribeA",subscribeNo);
+	}
+
+	public Integer selectExchangChart(Search s) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectExchangeChart",s);
+	}
+
+	public ArrayList<AdminExchange> selectExchangeList(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSessionTemplate.selectList("memberMapper.selectExchangeList",null,rowBounds);
+	}
+
+	public int updateExchange(ArrayList<AdminExchange> dArr) {
+		return sqlSessionTemplate.update("memberMapper.updateExchangeStatus",dArr);
+	}
+
+	public ArrayList<String> selectDateList(Search s) {
+		return (ArrayList)sqlSessionTemplate.selectList("memberMapper.selectDateList",s);
+	}
+
+	public ArrayList<AdminPayment> selectPaymentList(ArrayList<String> pArr, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSessionTemplate.selectList("memberMapper.selectPaymentList",pArr,rowBounds);
+	}
+
+	
 }

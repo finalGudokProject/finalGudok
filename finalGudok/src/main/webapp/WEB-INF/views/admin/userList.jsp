@@ -118,20 +118,20 @@ cursor: pointer;
 					        <div class="modal-body">
 					          <table>
 					            <tr>
-					                <td><input type="hidden" class="gradeM" name="grade" value="4">1등급</td>
-					                <td><input type="number" min="0" class="gradeMin" id="gradeMin1" name="gradeMin1"></td>
+					                <td><input type="hidden" class="gradeM" name="grade" value="4" onclick="event.cancelBubble=true">1등급</td>
+					                <td><input type="number" min="0" class="gradeMin" id="gradeMin1" name="gradeMin1" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					            <tr>
-					               <td><input type="hidden" class="gradeM" name="grade" value="3">2등급</td>
-					                <td><input type="number" min="0" class="gradeMin" id="gradeMin2" name="gradeMin2"></td>
+					               <td><input type="hidden" class="gradeM" name="grade" value="3" onclick="event.cancelBubble=true">2등급</td>
+					                <td><input type="number" min="0" class="gradeMin" id="gradeMin2" name="gradeMin2" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					             <tr>
-					               <td><input type="hidden" class="gradeM" name="grade" value="2">3등급</td>
-					                <td><input type="number" min="0" class="gradeMin" id="gradeMin3" name="gradeMin3"></td>
+					               <td><input type="hidden" class="gradeM" name="grade" value="2" onclick="event.cancelBubble=true">3등급</td>
+					                <td><input type="number" min="0" class="gradeMin" id="gradeMin3" name="gradeMin3" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					            <tr>
-					                <td><input type="hidden" class="gradeM" name="grade" value="1">4등급</td>
-					                <td><input type="number" min="0" class="gradeMin" id="gradeMin4" name="gradeMin4"></td>
+					                <td><input type="hidden" class="gradeM" name="grade" value="1" onclick="event.cancelBubble=true">4등급</td>
+					                <td><input type="number" min="0" class="gradeMin" id="gradeMin4" name="gradeMin4" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					          </table>
 					        </div>
@@ -157,21 +157,21 @@ cursor: pointer;
 					        <div class="modal-body">
 					          <table>
 					            <tr>
-					                <td><input type="hidden" class="grade" name="grade" value="4">1등급</td>
-					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate1" name="gradeRate"></td>
+					                <td><input type="hidden" class="grade" name="grade" value="4" onclick="event.cancelBubble=true">1등급</td>
+					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate1" name="gradeRate" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					             <tr>
-					                <td><input type="hidden" class="grade" name="grade" value="3">2등급</td>
+					                <td><input type="hidden" class="grade" name="grade" value="3" onclick="event.cancelBubble=true">2등급</td>
 					                
-					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate2" name="gradeRate"></td>
+					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate2" name="gradeRate" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					             <tr>
-					                <td><input type="hidden" class="grade" name="grade" value="2">3등급</td>
-					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate3" name="gradeRate"></td>
+					                <td><input type="hidden" class="grade" name="grade" value="2" onclick="event.cancelBubble=true">3등급</td>
+					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate3" name="gradeRate" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					             <tr>
-					                <td><input type="hidden" class="grade" name="grade" value="1">4등급</td>
-					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate4" name="gradeRate"></td>
+					                <td><input type="hidden" class="grade" name="grade" value="1" onclick="event.cancelBubble=true">4등급</td>
+					                <td><input type="number" min="0" max="100" class="gradeRate" id="rate4" name="gradeRate" onclick="event.cancelBubble=true"></td>
 					            </tr>
 					
 					          </table>

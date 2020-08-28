@@ -16,10 +16,13 @@ import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
 import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
+import com.kh.finalGudok.member.model.vo.Search;
 import com.kh.finalGudok.member.model.vo.Withdrawal;
+import com.kh.finalGudok.member.model.vo.AdminExchange;
 import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
+import com.kh.finalGudok.member.model.vo.AdminSubscribe;
 
 public interface MemberService {
 
@@ -118,6 +121,35 @@ public interface MemberService {
 	Integer selectMemberSecessionCnt(AdminSecession s);
 
 	ArrayList<AdminSecession> selectMemberSecession(PageInfo pi);
+
+	ArrayList<AdminSubscribe> selectOrderList(PageInfo pi);
+
+	int getOrderCnt();
+
+	int updateDelivery(ArrayList<AdminSubscribe> dArr);
+
+	AdminSubscribe selectOrder(int subscribeNo);
+
+	AdminPayment selectPayment(int subscribeNo);
+
+	int selectTotalPayment(int subscribeNo);
+
+	int selectItemTotalP(int subscribeNo);
+
+	int updateSubscribeA(Integer subscribeNo);
+
+	Integer selectExchangeChart(Search s);
+
+	ArrayList<AdminExchange> selectExchange(PageInfo pi);
+
+	int updateExchange(ArrayList<AdminExchange> dArr);
+
+	ArrayList<String> selectDateList(Search s);
+
+	ArrayList<AdminPayment> selectPaymentList(ArrayList<String> pArr, PageInfo pi);
+
+	
+
 
 }
 

@@ -185,78 +185,7 @@ input, select,textarea{
 
 <!-- Postcodify를 로딩하자 -->
 			 	<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
-			 	<script>
-			 		//정보 수정
-			        function validate(){
-			        
-			    	if($("#email").val().trim().length==0){
-				    		alert('이메일을 확인하세요.');
-				    		$("#email").focus();
-			    		
-			    		return false;
-			
-			    	}else if($("#address1").val().trim().length==0){
-				    		alert('우편번호를 확인하세요.');
-				    		$("#address1").focus();
-			    		
-			    		return false;
-			    	}else if($("#address2").val().trim().length==0){
-			    		alert('우편번호를 확인하세요.');
-			    		$("#address2").focus();
-		    		
-		    		return false;
-			    	}else if($("#address3").val().trim().length==0){
-			    		alert('우편번호를 확인하세요.');
-			    		$("#address3").focus();
-		    		
-		    		return false;
-			    	}else if($("#point").val().trim().length==0){
-			    		alert('포인트를 확인하세요.');
-			    		$("#point").focus();
-		    		
-		    		return false;
-			    			
-			    
-					
-			    	}else{
-			    		alert('회원 정보가 수정되었습니다.');
-			    		return true;
-			    	}
-			        
-			      };
-						 	
-			 	
-			 	
-			 		//주소 api
-			 		$(function(){
-			 			$("#postcodify_search_button").postcodifyPopUp();
-			 		})
-			 		
-			 		
-			 		/* function goList(){
-			 			 var type=${type};
-	   	        		 var page=${beforePage };   
-	   	        		 alert(type);
-	   	        		 
-	   	        		 if(type=="user"){
-	   	           		location.href="gradeList.do?page="+page;
-	   	        		 }else{
-	   	        		location.href="sList.do?page="+page;	 
-	   	        		 }
-			 		} */
-			 		
-			 		
-			 		function deleteM(){
-			 			confirm("회원을 삭제하시겠습니까?");
-			 			 var memberNo=${m.memberNo };   
-			 			 var page=${beforePage };  
-	   	        		 alert(memberNo);
-	   	           		location.href="deleteM.do?memberNo="+memberNo+"&page="+page;
-			 			
-			 		}
-			 		
-			 		
-			 	</script>
+	
 
                     <br>
 
@@ -329,7 +258,78 @@ input, select,textarea{
 
             </div><!--내용담은 컨테이너-->
         </div><!--250px띄운 div-->
-        
+        		 	<script>
+			 		//정보 수정
+			        function validate(){
+			        
+			    	if($("#email").val().trim().length==0){
+				    		alert('이메일을 확인하세요.');
+				    		$("#email").focus();
+			    		
+			    		return false;
+			
+			    	}else if($("#address1").val().trim().length==0){
+				    		alert('우편번호를 확인하세요.');
+				    		$("#address1").focus();
+			    		
+			    		return false;
+			    	}else if($("#address2").val().trim().length==0){
+			    		alert('우편번호를 확인하세요.');
+			    		$("#address2").focus();
+		    		
+		    		return false;
+			    	}else if($("#address3").val().trim().length==0){
+			    		alert('우편번호를 확인하세요.');
+			    		$("#address3").focus();
+		    		
+		    		return false;
+			    	}else if($("#point").val().trim().length==0){
+			    		alert('포인트를 확인하세요.');
+			    		$("#point").focus();
+		    		
+		    		return false;
+			    			
+			    
+					
+			    	}else{
+			    		alert('회원 정보가 수정되었습니다.');
+			    		return true;
+			    	}
+			        
+			      };
+						 	
+			 	
+			 	
+			 		//주소 api
+			 		$(function(){
+			 			$("#postcodify_search_button").postcodifyPopUp();
+			 		})
+			 		
+			 		
+			 			 function goList(){
+			 			 var type=${type};
+	   	        		 var page=${beforePage };   
+	   	        		 alert(type);
+	   	        		 
+	   	        		 if(type=="user"){
+	   	           		location.href="gradeList.do?page="+page;
+	   	        		 }else{
+	   	        		location.href="sList.do?page="+page;	 
+	   	        		 }
+			 		} 
+			 		
+			 		
+			 		function deleteM(){
+			 			confirm("회원을 삭제하시겠습니까?");
+			 			 var memberNo=${m.memberNo };   
+			 			 var page=${beforePage };  
+	   	        		 alert(memberNo);
+	   	           		location.href="deleteM.do?memberNo="+memberNo+"&page="+page;
+			 			
+			 		}
+			 		
+			 		
+			 	</script>
        <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

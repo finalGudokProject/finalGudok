@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.member.model.dao.MemberDao;
+import com.kh.finalGudok.member.model.vo.AdminExchange;
 import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
+import com.kh.finalGudok.member.model.vo.AdminSubscribe;
 import com.kh.finalGudok.member.model.vo.Cart;
 import com.kh.finalGudok.member.model.vo.DeleteHeart;
 import com.kh.finalGudok.member.model.vo.Delivery;
@@ -24,6 +26,7 @@ import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
 import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
+import com.kh.finalGudok.member.model.vo.Search;
 import com.kh.finalGudok.member.model.vo.Withdrawal;
 
 @Service("mService")
@@ -285,7 +288,73 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<AdminSecession> selectMemberSecession(PageInfo pi) {
 		return mDao.selectMemberSecession(pi);
 	}
+
+	@Override
+	public ArrayList<AdminSubscribe> selectOrderList(PageInfo pi) {
+		return mDao.selectOrderList(pi);
+	}
+
+	@Override
+	public int getOrderCnt() {
+		return mDao.selectOrderCnt();
+	}
+
+	@Override
+	public int updateDelivery(ArrayList<AdminSubscribe> dArr) {
+		return mDao.updateDelivery(dArr);
+	}
+
+	@Override
+	public AdminSubscribe selectOrder(int subscribeNo) {
+		return mDao.selectOrder(subscribeNo);
+	}
+
+	@Override
+	public AdminPayment selectPayment(int subscribeNo) {
+		return mDao.selectPayment(subscribeNo);
+	}
+
+	@Override
+	public int selectTotalPayment(int subscribeNo) {
+		return mDao.selectTotalPayment(subscribeNo);
+	}
+
+	@Override
+	public int selectItemTotalP(int subscribeNo) {
+		return mDao.selectItemTotalP(subscribeNo);
+	}
+
+	@Override
+	public int updateSubscribeA(Integer subscribeNo) {
+		return mDao.updateSubscribeA(subscribeNo);
+	}
+
+	@Override
+	public Integer selectExchangeChart(Search s) {
+		return mDao.selectExchangChart(s);
+	}
+
+	@Override
+	public ArrayList<AdminExchange> selectExchange(PageInfo pi) {
+		return mDao.selectExchangeList(pi);
+	}
+
+	@Override
+	public int updateExchange(ArrayList<AdminExchange> dArr) {
+		return mDao.updateExchange(dArr);
+	}
+
+	@Override
+	public ArrayList<String> selectDateList(Search s) {
+		return mDao.selectDateList(s);
+	}
+
+	@Override
+	public ArrayList<AdminPayment> selectPaymentList(ArrayList<String> pArr, PageInfo pi) {
+		return mDao.selectPaymentList(pArr,pi);
+	}
+
 	
 
-
+	
 }

@@ -150,6 +150,8 @@
 		<result property="memberId" column="MEMBER_ID"/>
 		<result property="email" column="EMAIL"/>
 		<result property="totalPayment" column="TOTAL_PAYMENT"/>
+		<result property="totalCount" column="TOTAL_COUNT"/>
+		
 	</resultMap>
 	<resultMap type="AdminSecession" id="adminSecessionResultSet">
 		<id property="secessionNo" column="SECESSION_NO"/>
@@ -161,6 +163,35 @@
 		<result property="secessionDate" column="SECESSION_DATE"/>
 		<result property="gradeNo" column="GRADE_NO"/>
 		<result property="total" column="TOTAL"/>
+	</resultMap>
+	<resultMap type="AdminSubscribe" id="adminSubscribeResultSet">
+		<id property="subscribeNo" column="SUBSCRIBE_NO"/>
+		<result property="itemNo" column="ITEM_NO"/>
+		<result property="cycleNo" column="CYCLE_NO"/>
+		<result property="subscribeStatus" column="SUBSCRIBE_STATUS"/>
+		<result property="subscribeDate" column="SUBSCRIBE_DATE"/>
+		<result property="amount" column="AMOUNT"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="memberId" column="MEMBER_ID"/>
+		<result property="email" column="EMAIL"/>
+		<result property="exchangeStatus" column="EXCHANGE_STATUS"/>
+		<result property="itemName" column="ITEM_NAME"/>
+		<result property="deliveryStatus" column="DELIVERY_STATUS"/>
+		<result property="address1" column="ADDRESS_1"/>
+		<result property="address2" column="ADDRESS_2"/>
+		<result property="address3" column="ADDRESS_3"/>
+	</resultMap>
+	<resultMap type="AdminExchange" id="adminExchangeResultSet">
+		<id property="exchangeNo" column="EXCHANGE_NO"/>
+		<result property="exchangeStatus" column="EXCHANGE_STATUS"/>
+		<result property="exchangeContent" column="EXCHANGE_CONTENT"/>
+		<result property="exchangeDate" column="EXCHANGE_DATE"/>
+		<result property="itemName" column="ITEM_NAME"/>
+		<result property="subscribeNo" column="SUBSCRIBE_NO"/>
+		<result property="exchangeCategory" column="EXCHANGE_CATEGORY"/>
+		<result property="memberId" column="MEMBER_ID"/>
+		<result property="itemPrice" column="ITEM_PRICE"/>
+		
 	</resultMap>
 	
 	
@@ -388,7 +419,7 @@
 	</select>
 	<!-- -다시 도전 예정 
 	<select id="selectTotalPay" parameterType="_int" resultType="int">
-		SELECT SUM((ITEM_PRICE*AMOUNT)-POINT) AS TOTAL_PAY
+		SELECT SUM((ITEM_PRICE*AMOUNT)-POINT) AS TOTAL_PAYMENT
 		FROM PAYLIST
 		GROUP BY MEMBER_NO
 		HAVING MEMBER_NO=#{i}
@@ -457,10 +488,103 @@
 		FROM SECESSION S
 		LEFT JOIN MEMBER M ON(S.MEMBER_NO=M.MEMBER_NO)
 	</select>
-	
-	
-	
-	
+	<select id="selectOrderList" resultMap="adminSubscribeResultSet">
+		SELECT *
+        FROM SUBSCRIBE S
+        LEFT JOIN ITEM I ON(S.ITEM_NO=I.ITEM_NO)
+        LEFT JOIN DELIVERY D ON(S.SUBSCRIBE_NO=D.SUBSCRIBE_NO)
+        LEFT JOIN PAYMENT P ON(S.SUBSCRIBE_NO=P.SUBSCRIBE_NO)
+        ORDER BY SUBSCRIBE_DATE DESC
+	</select>
+	<select id="selectOrderCnt" resultType="_int">
+		SELECT COUNT(*)
+        FROM SUBSCRIBE S
+	</select>
+	<update id="updateDelivery"  parameterType="java.util.ArrayList">
+		<foreach item="i" collection="list" open="DECLARE BEGIN" separator=";" close="; END;">
+			UPDATE DELIVERY
+			SET DELIVERY_STATUS=#{i.deliveryStatus}
+			WHERE SUBSCRIBE_NO=#{i.subscribeNo}
+		</foreach>
+	</update>
+	<select id="selectOrder" parameterType="int" resultMap="adminSubscribeResultSet">
+		SELECT S.*,I.*,M.ADDRESS_1,M.ADDRESS_2,M.ADDRESS_3,D.*
+        FROM SUBSCRIBE S
+        LEFT JOIN ITEM I ON(S.ITEM_NO=I.ITEM_NO)
+        LEFT JOIN MEMBER M ON(S.MEMBER_NO=M.MEMBER_NO)
+        LEFT JOIN DELIVERY D ON(S.SUBSCRIBE_NO=D.SUBSCRIBE_NO)
+        LEFT JOIN PAYMENT P ON(S.SUBSCRIBE_NO=P.SUBSCRIBE_NO)
+        WHERE S.SUBSCRIBE_NO=#{subscribeNo}
+	</select>
+	<select id="selectPayment" parameterType="_int" resultMap="adminPaymentResultSet">
+		SELECT *
+        FROM PAYMENT P
+        LEFT JOIN ITEM I ON(P.ITEM_NO=I.ITEM_NO)
+        WHERE SUBSCRIBE_NO=#{subscribeNo}
+	</select>
+	<select id="selectTotalPayment" parameterType="_int" resultType="int">
+		SELECT SUM((ITEM_PRICE*AMOUNT)-POINT) AS TOTAL_PAYMENT
+		FROM PAYMENT P
+        LEFT JOIN ITEM I ON(P.ITEM_NO=I.ITEM_NO)
+		GROUP BY SUBSCRIBE_NO
+		HAVING SUBSCRIBE_NO=#{subscribeNo}
+	</select>
+	<select id="selectItemTotalP" parameterType="_int" resultType="int">
+		SELECT SUM(ITEM_PRICE*AMOUNT) AS TOTAL_PAYMENT
+		FROM PAYMENT P
+        LEFT JOIN ITEM I ON(P.ITEM_NO=I.ITEM_NO)
+		GROUP BY SUBSCRIBE_NO
+		HAVING SUBSCRIBE_NO=#{subscribeNo}
+	</select>
+	<update id="updateSubscribeA" parameterType="int">
+		UPDATE SUBSCRIBE
+		SET SUBSCRIBE_STATUS='Y'
+		WHERE SUBSCRIBE_NO=#{subscribeNo}
+	</update>
+	<select id="selectExchangeChart" parameterType="object" resultType="int">
+		SELECT COUNT(*)
+        FROM (SELECT *
+            FROM EXCHANGE
+             <![CDATA[
+            WHERE EXCHANGE_DATE >= #{lastDay} AND EXCHANGE_DATE < #{startDay}
+             ]]>
+            )
+        GROUP BY EXCHANGE_CATEGORY
+        HAVING EXCHANGE_CATEGORY=#{temp1}
+	</select>
+	<select id="selectExchangeList" parameterType="AdminExchange" resultMap="adminExchangeResultSet">
+		SELECT *
+        FROM EXCHANGE E
+        LEFT JOIN SUBSCRIBE S ON(E.SUBSCRIBE_NO=S.SUBSCRIBE_NO)
+        LEFT JOIN ITEM I ON (S.ITEM_NO=I.ITEM_NO)
+        LEFT JOIN MEMBER M ON (S.MEMBER_NO=M.MEMBER_NO)
+        ORDER BY EXCHANGE_NO DESC
+	</select>
+	<update id="updateExchangeStatus" parameterType="java.util.List">
+		<foreach item="i" index="index" collection="list" open="DECLARE BEGIN" separator=";" close="; END;">
+			UPDATE EXCHANGE
+	        SET EXCHANGE_STATUS=#{i.exchangeStatus}
+	        WHERE EXCHANGE_NO=#{i.exchangeNo}
+        </foreach>
+	</update>
+	<select id="selectDateList" parameterType="object" resultType="string">
+		SELECT TO_CHAR(TO_DATE(#{startDay},'YYYY-MM-DD') + LEVEL-1, 'YYYY-MM-DD') AS "SEARCHDATE"
+		FROM DUAL
+		<![CDATA[
+		CONNECT BY LEVEL <= (TO_DATE(#{lastDay})+1) - TO_DATE(#{startDay})
+		]]>
+	</select>
+	<select id="selectPaymentList" parameterType="java.util.List" resultMap="adminPaymentResultSet">
+			SELECT TO_CHAR(PAYMENT_DATE,'yyyy-mm-dd') AS PAYMENT_DATE,NVL(SUM(ITEM_PRICE*AMOUNT),0) AS TOTAL_PAYMENT,COUNT(*) AS TOTAL_COUNT
+	        FROM PAYMENT P
+	        LEFT JOIN ITEM I ON(P.ITEM_NO=I.ITEM_NO)
+	        GROUP BY TO_CHAR(PAYMENT_DATE,'yyyy-mm-dd')
+	        HAVING TO_CHAR(PAYMENT_DATE,'yyyy-mm-dd') IN 
+		<foreach item="i" index="index" collection="list" open="(" separator="," close=")">
+	        #{i}
+        </foreach>
+        	ORDER BY PAYMENT_DATE DESC
+	</select>
 	
 	
 	

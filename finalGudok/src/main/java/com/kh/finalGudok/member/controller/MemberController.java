@@ -5,7 +5,10 @@ import static com.kh.finalGudok.common.pagination2.getPageInfo2;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +47,11 @@ import com.kh.finalGudok.item.model.vo.Item;
 import com.kh.finalGudok.item.model.vo.PageInfo;
 import com.kh.finalGudok.member.model.exception.MemberException;
 import com.kh.finalGudok.member.model.service.MemberService;
+import com.kh.finalGudok.member.model.vo.AdminExchange;
 import com.kh.finalGudok.member.model.vo.AdminMember;
 import com.kh.finalGudok.member.model.vo.AdminPayment;
 import com.kh.finalGudok.member.model.vo.AdminSecession;
+import com.kh.finalGudok.member.model.vo.AdminSubscribe;
 import com.kh.finalGudok.member.model.vo.Cart;
 import com.kh.finalGudok.member.model.vo.DeleteHeart;
 import com.kh.finalGudok.member.model.vo.Delivery;
@@ -57,6 +62,7 @@ import com.kh.finalGudok.member.model.vo.Member;
 import com.kh.finalGudok.member.model.vo.Point;
 import com.kh.finalGudok.member.model.vo.Reply;
 import com.kh.finalGudok.member.model.vo.Review;
+import com.kh.finalGudok.member.model.vo.Search;
 import com.kh.finalGudok.member.model.vo.Withdrawal;
 
 @SessionAttributes("loginUser")
@@ -1204,13 +1210,495 @@ public class MemberController {
 		
 		
 		
+		//주문 상품 리스트
+		@RequestMapping("oList.do")
+		public ModelAndView selectOrderList(ModelAndView mv, Integer page) {
+			
+			
+			int currentPage=1;
+			
+			if(page!=null) {
+				currentPage=page;
+			}
+			
+			int listCount=mService.getOrderCnt();
+		
+			PageInfo pi=new PageInfo();
+			
+			int pageLimit=10; //보여질 페이지 총 갯수
+			int boardLimit=5; //게시판 한 페이지에 뿌려질 게시글 수
+			pi=getPageInfo2(currentPage,listCount,pageLimit,boardLimit);
+			
+			
+			ArrayList<AdminSubscribe> oList=mService.selectOrderList(pi);
+			System.out.println();
+			
+			if(oList!=null) {
+				
+				mv.addObject("pi",pi).addObject("oList",oList).setViewName("admin/orderList");
+				
+				return mv;
+			} else {			
+				throw new MemberException("주문 내역 확인 실패!");
+			}
+			
+		}
+		
+		
+		//관리자 배송 상태 변경
+		@RequestMapping("updateDelivery.do")
+		@ResponseBody
+		public String updateDelivery(String sendArr, String deliveryStatus) {
+			
+			String[] strArr=sendArr.split(",");
+
+			
+			ArrayList<AdminSubscribe> dArr=new ArrayList<>();
+			
+			
+			for(int i=0;i<strArr.length;i++) {
+				AdminSubscribe e=new AdminSubscribe();
+				e.setSubscribeNo(Integer.valueOf(strArr[i]));
+				e.setDeliveryStatus(deliveryStatus);
+				dArr.add(e);
+			}
+			
+			System.out.println(dArr);
+			
+			int result=mService.updateDelivery(dArr);
+			
+			
+			System.out.println("결과는"+result);
+			if(result<0) {
+				
+				return "success";
+				
+			}else {
+				throw new MemberException("상태 변경 실패!");
+			}
+		}
 		
 		
 		
+		@RequestMapping("oListChange.do")
+		public void changeOrderList(HttpServletResponse response, Integer page) throws IOException {
+		
+			System.out.println("여기 제발 와랑");
+			int currentPage=1;
+			
+			if(page!=null) {
+				currentPage=page;
+			}
+			
+			int listCount=mService.getOrderCnt();
+		
+			PageInfo pi=new PageInfo();
+			
+			int pageLimit=10; //보여질 페이지 총 갯수
+			int boardLimit=5; //게시판 한 페이지에 뿌려질 게시글 수
+			pi=getPageInfo2(currentPage,listCount,pageLimit,boardLimit);
+			
+			
+			ArrayList<AdminSubscribe> oList=mService.selectOrderList(pi);
+			
+			for(int i=0;i<oList.size();i++) {
+				if(oList.get(i).getDeliveryStatus().equalsIgnoreCase("N")) {
+					oList.get(i).setDeliveryStatus("배송 대기");
+				}else if(oList.get(i).getDeliveryStatus().equalsIgnoreCase("D")) {
+					oList.get(i).setDeliveryStatus("배송중");
+				}else {
+					oList.get(i).setDeliveryStatus("배송완료");
+				}
+				
+				
+				
+			}
+			
+			System.out.println("여기 제발 와랑2");
+			
+			
+			
+			
+			
+			response.setContentType("application/json;charset=utf-8");
+	
+			if(!oList.isEmpty()) {
+	
+			JSONArray jarr=new JSONArray();
+			
+			for(int i=0;i<oList.size();i++) {
+				JSONObject jList=new JSONObject();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				
+				jList.put("subscribeNo",oList.get(i).getSubscribeNo());
+				jList.put("subscribeDate",sdf.format(oList.get(i).getSubscribeDate()));
+				jList.put("itemNo",oList.get(i).getItemNo());
+				jList.put("itemName",oList.get(i).getItemName());
+				jList.put("amount",oList.get(i).getAmount());
+				jList.put("memberId",oList.get(i).getMemberId());
+				jList.put("deliveryStatus",oList.get(i).getDeliveryStatus());
+				
+				jarr.add(jList);
+			}
+			
+			JSONObject sendJson=new JSONObject();
+			sendJson.put("list",jarr);
+
+			
+			PrintWriter out=response.getWriter();
+			out.print(sendJson);
+			out.flush();
+			out.close();
+		
+			
+			}else{
+				throw new MemberException("상태 변경 실패!");
+			}
+		
+	}
+		
+		
+		//구독내역 상세보기 
+		@RequestMapping("oDetail.do")
+		public ModelAndView selectOrderDetail(ModelAndView mv, Integer page, Integer subscribeNo,String type) {
+			
+			
+			System.out.println("타입은???"+type);
+			//구독 상세 내역 조회
+			AdminSubscribe sc=mService.selectOrder(subscribeNo);
+			
+			System.out.println("sc"+sc);
+			//총 금액(할인 전 금액)
+			int total=mService.selectItemTotalP(subscribeNo);
+			System.out.println("total"+total);
+			
+			//결제 내역 조회 
+			AdminPayment p=mService.selectPayment(subscribeNo);
+			
+			p.setTotalPayment(mService.selectTotalPayment(subscribeNo));
+			
+			System.out.println("p"+p);
 		
 		
 			
-	}
+			System.out.println("페이지는여"+page);
+			
+			
+			if(sc!=null&&p!=null) {
+				
+				mv.addObject("sc",sc).addObject("p", p).addObject("page",page).addObject("type",type).addObject("total", total).setViewName("admin/orderDetail");
+				
+				return mv;
+			}else{
+				throw new MemberException("상태 변경 실패!");
+			}
+			
+			
+		}
+		
+		
+		@RequestMapping("updateSubscribe.do")
+		public ModelAndView updateSubscribeA(ModelAndView mv, Integer page,Integer subscribeNo) {
+			
+			int result=mService.updateSubscribeA(subscribeNo);
+			
+			System.out.println("번호는"+subscribeNo+"페이지는"+page+"결과는!!!"+result);
+			
+			if(result>0) {
+					mv.addObject("page",page).setViewName("redirect:oList.do");
+					return mv;
+			}else{
+				throw new MemberException("구독 취소 실패!");
+			}
+		}
+		
+		
+		@RequestMapping("exchangList.do")
+		public ModelAndView exchangeListView(ModelAndView mv, Integer page) {
+			//주간 교환 사유별 비율을 조회하기 위한 날짜 수집
+			Calendar start = Calendar.getInstance(); // 현재 시간
+			Date startDate=new Date(start.getTimeInMillis()); //Date형으로 변환
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String startDay = sdf.format(startDate);
+			
+			start.add(Calendar.DATE, -7);//1일전
+			Date lastDate=new Date(start.getTimeInMillis());
+			String lastDay=sdf.format(lastDate); // 7일전
+			/*startDate.add(Calendar.MONTH, -3); // 거기에 3달 전
+*/			
+			System.out.println(startDay);
+			System.out.println(lastDay);
+			
+			
+			
+			//차트용 리스트
+			ArrayList<Search> list=new ArrayList<>();
+			
+			for(int i=1;i<4;i++) {
+				Search s=new Search();
+				s.setStartDay(startDay);
+				s.setLastDay(lastDay);
+				s.setTemp1(i);
+				list.add(s);
+				
+				Integer temp=mService.selectExchangeChart(list.get(i-1));
+				
+				if(temp==null) {
+					temp=0;
+				}
+				s.setTemp2(temp);
+				
+				System.out.println(list.get(i-1).getTemp2());
+			}
+			
+			
+			
+			//교환리스트 
+			
+			
+			int currentPage=1;
+			
+			if(page!=null) {
+				currentPage=page;
+			}
+			
+			int listCount=mService.getOrderCnt();
+		
+			PageInfo pi=new PageInfo();
+			
+			int pageLimit=10; //보여질 페이지 총 갯수
+			int boardLimit=5; //게시판 한 페이지에 뿌려질 게시글 수
+			pi=getPageInfo2(currentPage,listCount,pageLimit,boardLimit);
+			
+			
+			ArrayList<AdminExchange> eList=mService.selectExchange(pi);
+			
+			
+			for(int i=0;i<eList.size();i++) {
+				if(eList.get(i).getExchangeStatus().equalsIgnoreCase("N")) {
+					eList.get(i).setExchangeStatus("교환 대기");
+				}else {
+					eList.get(i).setExchangeStatus("교환 완료");
+				}
+				
+			}
+			
+			
+			
+			if(list!=null&&eList!=null) {
+				
+				mv.addObject("list",list).addObject("pi",pi).addObject("eList",eList).addObject("pi",pi).setViewName("admin/exchangeList");
+			
+				
+				return mv;
+			}else{
+				throw new MemberException("교환 내역 조회 실패!");
+			}
+		}
+		
+		
+		
+		
+		@RequestMapping("eChange.do")
+		@ResponseBody
+		public String exchangeChange(Integer page, String type,String sendArr) {
+			
+			System.out.println(page);
+			System.out.println(type);
+			
+			String[] strArr=sendArr.split(",");
+			
+			ArrayList<AdminExchange> dArr=new ArrayList<>();
+			
+			for(int i=0;i<strArr.length;i++) {
+				AdminExchange e=new AdminExchange();
+				e.setExchangeNo(Integer.valueOf(strArr[i]));
+				e.setExchangeStatus(type);
+				dArr.add(e);
+			}
+			
+			
+			int result=mService.updateExchange(dArr);
+			
+			
+			if(result<0) {
+				return "success";
+				
+			}else{
+				throw new MemberException("교환 상태 변경 실패!");
+			}
+		}
+		
+		@RequestMapping("exchangeListChange.do")
+		public void selectChangedExchangeList(HttpServletResponse response, Integer page) throws IOException {
+
+			//교환리스트 
+			
+			
+			int currentPage=1;
+			
+			if(page!=null) {
+				currentPage=page;
+			}
+			
+			int listCount=mService.getOrderCnt();
+		
+			PageInfo pi=new PageInfo();
+			
+			int pageLimit=10; //보여질 페이지 총 갯수
+			int boardLimit=5; //게시판 한 페이지에 뿌려질 게시글 수
+			pi=getPageInfo2(currentPage,listCount,pageLimit,boardLimit);
+			
+			
+			ArrayList<AdminExchange> eList=mService.selectExchange(pi);
+			
+			
+			for(int i=0;i<eList.size();i++) {
+				if(eList.get(i).getExchangeStatus().equalsIgnoreCase("N")) {
+					eList.get(i).setExchangeStatus("교환 대기");
+				}else {
+					eList.get(i).setExchangeStatus("교환 완료");
+				}
+				
+			}
+			
+			
+			response.setContentType("application/json;charset=utf-8");
+
+
+			if(!eList.isEmpty()) {
+		
+				JSONArray jarr=new JSONArray();
+				
+				for(int i=0;i<eList.size();i++) {
+					JSONObject jList=new JSONObject();
+					
+					jList.put("exchangeNo",eList.get(i).getExchangeNo());
+					jList.put("exchangeDate",eList.get(i).getExchangeDate());
+					jList.put("exchangeContent",eList.get(i).getExchangeContent());
+					jList.put("subscribeNo",eList.get(i).getSubscribeNo());
+					jList.put("itemName",eList.get(i).getItemName());
+					jList.put("memberId",eList.get(i).getMemberId());
+					jList.put("itemPrice",eList.get(i).getItemPrice());
+					jList.put("exchangeStatus",eList.get(i).getExchangeStatus());
+					
+					jarr.add(jList);
+				}
+				
+				JSONObject sendJson=new JSONObject();
+				sendJson.put("list",jarr);
+				System.out.println(jarr);
+				
+				PrintWriter out=response.getWriter();
+				out.print(sendJson);
+				out.flush();
+				out.close();
+				
+				
+				
+			}else {
+				throw new MemberException("이벤트 전체 조회 실패!");
+			}
+			
+		}
+		
+		
+		@RequestMapping("sDateList.do")
+		public ModelAndView selectSalesDate(ModelAndView mv, Integer page, String type) {
+			
+			
+			System.out.println("타입은?"+type);
+		
+			
+			int currentPage=1;
+			
+			if(page!=null) {
+				currentPage=page;
+			}
+			
+			int listCount=mService.getMemberCnt();
+			
+			PageInfo pi=new PageInfo();
+			
+			int pageLimit=10; //보여질 페이지 총 갯수
+			int boardLimit=5; //게시판 한 페이지에 뿌려질 게시글 수
+			pi=getPageInfo2(currentPage,listCount,pageLimit,boardLimit);
+			
+			ArrayList<AdminPayment> pList=new ArrayList<>();
+			
+			
+			//기본 첫 화면 (N) --> 해당년도의 1월 1일부터 검색
+			
+			/* if(type.equalsIgnoreCase("N")) { */
+				
+			Calendar last = Calendar.getInstance(); // 현재 시간
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String lastDay = sdf.format(last.getTime());
+			String startDay = lastDay.substring(0,4).concat("-01-01");
+			
+				//검색할 날짜 뽑아오기 
+				Search s=new Search();
+				s.setLastDay(lastDay); //마지막 날짜
+				s.setStartDay(startDay); //처음 날짜
+				System.out.println(s);
+				ArrayList<String> pArr=mService.selectDateList(s);
+			  
+				//화면에 노출될 매출 리스트 만들기 
+				pList=mService.selectPaymentList(pArr,pi);
+				
+				//검색한 값의 총 합계 
+				
+				int sumTotalP=0;
+				int sumTotalC=0;
+				for(int i=0; i<pList.size();i++) {
+					int p=pList.get(i).getTotalPayment();
+					sumTotalP+=p;
+					int c=pList.get(i).getTotalCount();
+					sumTotalC+=c;
+					
+				}
+				
+	
+			
+		
+			
+			//연도별 검색 (Y)
+			
+			
+			
+			//월별 검색 (M)
+			
+			
+			//일별 검색 (D)
+			
+			
+			
+			//오늘 검색(T)
+			
+			
+			//일주일 검색(W)
+			
+			
+			
+			//한달 검색 (O)
+			
+			
+			if(!pList.isEmpty()) {
+				
+				mv.addObject("pList",pList).addObject("pi",pi).addObject("type",type).addObject("lastDay",lastDay)
+				.addObject("startDay",startDay).addObject("sumTotalP", sumTotalP).addObject("sumTotalC",sumTotalC).setViewName("admin/salesDateList");
+				return mv;
+			}else {
+				
+				throw new MemberException("결제 목록 가져오기 실패!");
+			}
+			
+			
+			
+		}
+		
+
+}
 	
 
 //	@RequestMapping("emailDupCheck.do")

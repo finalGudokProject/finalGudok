@@ -42,6 +42,8 @@
 		<typeAlias type="com.kh.finalGudok.member.model.vo.AdminMember" alias="AdminMember"/>
 		<typeAlias type="com.kh.finalGudok.member.model.vo.AdminPayment" alias="AdminPayment"/>
 		<typeAlias type="com.kh.finalGudok.member.model.vo.AdminSecession" alias="AdminSecession"/>
+		<typeAlias type="com.kh.finalGudok.member.model.vo.AdminSubscribe" alias="AdminSubscribe"/>
+		<typeAlias type="com.kh.finalGudok.member.model.vo.AdminExchange" alias="AdminExchange"/>
 		
 		
 		
